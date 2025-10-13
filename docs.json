@@ -73,9 +73,12 @@
           {
             "group": "How-to",
             "pages": [
+              "test-hk-how-to/call-api",
               "test-hk-how-to/filter-data",
               "test-hk-how-to/create-form",
-              "test-hk-how-to/run-actions"
+              "test-hk-how-to/run-actions",
+              "test-hk-how-to/make-chart",
+              "test-hk-how-to/compose-layout"
             ]
           }
         ]

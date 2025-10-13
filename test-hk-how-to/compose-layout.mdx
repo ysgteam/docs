@@ -1,0 +1,89 @@
+---
+title: "Compose layout"
+description: "Description of your new file."
+---
+
+### 탭
+
+다른 블록 아래에 탭 붙이기
+
+```yaml
+blocks:
+  - type: http
+    tabOptions:
+      tabs:
+        - name: 1
+```
+
+탭 블록 단독으로 사용하기
+
+```yaml
+blocks:
+  - type: tab
+    tabOptions:
+      tabs: 
+```
+
+### 모달
+
+```yaml
+blocks:
+  - type: http
+		modals:
+		  - path: modal
+		    blocks: 
+		      - type: http
+```
+
+테이블 필드 링크 열어서 모달 열기
+
+```yaml
+columns:
+  name:
+    openModal: modal1
+modals:
+  - path: modal1
+```
+
+필드 버튼 눌러서 열기
+
+```yaml
+columns:
+  name:
+    buttons:
+      - label: button
+        openModal: modal1
+modals:
+  - path: modal1
+```
+
+액션 버튼으로 열기
+
+```yaml
+actions:
+  - label: modal
+    single: true
+    openModal: modal1
+modals:
+  - path: modal1    
+```
+
+### Popper
+
+```yaml
+
+```
+
+### 심플 레이아웃
+
+```yaml
+blocks:
+  - type: top
+```
+
+### 커스텀 레이아웃
+
+```yaml
+blocks:
+layout: 
+```
