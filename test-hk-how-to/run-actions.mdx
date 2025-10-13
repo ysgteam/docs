@@ -1,0 +1,40 @@
+---
+title: "Run actions"
+description: "Description of your new file."
+---
+
+### 기본 틀
+
+```yaml
+blocks:
+actions:
+  - label: button
+    type: http
+    placement: top right
+```
+
+### 단독 실행
+
+```yaml
+actions:
+  - type: http
+    single: true
+```
+
+### 테이블 데이터 선택후 실행
+
+```yaml
+actions:
+  - type: http
+    # forEach: true # 2개 이상 선택지 개별 연속 실행 필요시
+selectOptions:
+  enabled: true
+```
+
+### 액션 실행후 처리
+
+```yaml
+actions:
+  - type: http
+    responseFn: 
+```

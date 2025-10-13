@@ -1,0 +1,62 @@
+---
+title: "Create a form"
+description: "Description of your new file."
+---
+
+### 기본 형식
+
+```yaml
+blocks:
+  - type: http
+    method: post
+    fetchFn: 
+    params:
+      - key: name
+      - key: is_guest
+```
+
+### 입력 포맷
+
+```yaml
+params:
+  - key: description
+    format: textarea
+```
+
+### 고급 입력 포맷
+
+- reference 참고
+
+### Form 꾸미기
+
+```yaml
+params:
+  - key: name
+    group: 1
+  - key: is_guest
+    group: 1
+  - key: phone
+    style:
+      width: 100%
+  - key: email
+```
+
+### Form 제출 전 검증
+
+```yaml
+params:
+  - key: email
+    validateFn:
+submitButton:
+  disabledFn: 
+```
+
+### Form 제출 후 액션
+
+```yaml
+params:
+  - key: name
+reloadAfterSubmit: true
+redirectAfterSubmit: true
+responseFn: 
+```

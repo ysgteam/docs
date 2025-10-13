@@ -1,0 +1,43 @@
+---
+title: "Filter data"
+description: "Description of your new file."
+---
+
+### 기본 틀
+
+```yaml
+blocks:
+  - type: http
+    method: get
+    fetchFn: |
+    params:
+      - key: name      
+```
+
+### 입력 포맷
+
+```yaml
+params:
+  - key: date
+    format: date
+```
+
+### 필터 꾸미기
+
+```yaml
+display: form
+# display: col
+params:
+  - key: name
+  - key: email
+```
+
+### 여러 블록 한번에 필터
+
+```yaml
+params:
+  - key: name
+blocks:
+  - type: http
+  - type: http
+```
