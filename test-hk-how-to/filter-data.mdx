@@ -5,11 +5,13 @@ description: "Description of your new file."
 
 ### 기본 틀
 
+Filter data with input field
+
 ```yaml
 blocks:
   - type: http
     method: get
-    fetchFn: |
+    fetchFn:
     params:
       - key: name      
 ```
@@ -40,4 +42,41 @@ params:
 blocks:
   - type: http
   - type: http
+```
+
+### Table search in client-level
+
+```yaml
+type: http
+searchOptions:
+  enabled: true
+```
+
+### Column search in client-level
+
+```yaml
+type: http
+columns:
+  name:
+    filterOptions:
+      enabled: true
+```
+
+### Table pagination in client-level
+
+```yaml
+type: http
+paginationOptions:
+  enabled: true
+```
+
+### Table sorting
+
+```yaml
+type: http
+sortOptions:
+  enabled: true
+  initialSortBy:
+    field: created_at
+    type: desc # desc, asc
 ```

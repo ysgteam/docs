@@ -15,6 +15,16 @@ blocks:
       - key: is_guest
 ```
 
+```yaml
+- type: http
+  method: POST
+  params:
+    - key: name
+    - key: email
+    - key: memo
+  display: form
+```
+
 ### 입력 포맷
 
 ```yaml
@@ -41,6 +51,19 @@ params:
   - key: email
 ```
 
+```yaml
+display: form
+formOptions:
+  firstLabelWidth: 120px
+  labelWidth: 100px
+params:
+  - key: name
+    group: 1
+  - key: email
+    group: 1
+  - key: memo
+```
+
 ### Form 제출 전 검증
 
 ```yaml
@@ -49,6 +72,39 @@ params:
     validateFn:
 submitButton:
   disabledFn: 
+```
+
+브라우저 단에서 input 검증(validate) - 입력 값 가이드 역할
+
+```yaml
+params:
+  - key: email
+    validateFn: |
+      const value = param.value?.trim()
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+      if (!value) {
+        return '필수 입력 항목'
+      }
+      if (!emailRegex.test(value)) {
+        return '이메일 형식이 아님'
+      }
+      return '';
+```
+
+값이 알맞지 않을때 제출 버튼 비활성화
+
+```yaml
+display: form
+submitButton: 
+  disabledFn: |
+    const email = params.find(e => e.key == 'email')
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!email.value || !emailRegex.test(email.value.trim())) {
+      return true
+    }
+    return false
 ```
 
 ### Form 제출 후 액션

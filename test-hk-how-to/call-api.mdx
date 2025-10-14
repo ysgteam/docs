@@ -3,6 +3,52 @@ title: "Call API"
 description: "Description of your new file."
 ---
 
+### Display rows from JSON
+
+```yaml
+blocks:
+- type: http
+  method: GET
+  fetchFn: |
+    return [
+      { name: 'hey' },
+      { name: 'good day' },
+    ]
+```
+
+#### **Display rows from Fetch API**
+
+```yaml
+blocks:
+- type: http
+  method: GET
+  fetchFn: |
+    const r = await fetch('https://api.selectfromuser.com/sample-api/wines?page=1&limit=10')
+
+    const data = await r.json()
+
+    return data.rows
+```
+
+#### **Display rows from Axios API**
+
+```yaml
+blocks:
+- type: http
+  method: GET
+  fetchFn: |
+    const r = await axios.get(`https://api.selectfromuser.com/sample-api/wines?page=1&limit=10`)
+    
+    const rows = r.data.rows
+    
+    return rows
+  paginationOptions:
+    enabled: true
+    perPage: 3
+```
+
+---
+
 ### GET 요청
 
 ```yaml

@@ -68,10 +68,10 @@
         ]
       },
       {
-        "tab": "Test HK",
+        "tab": "How-to",
         "groups": [
           {
-            "group": "How-to",
+            "group": "Basic",
             "pages": [
               "test-hk-how-to/call-api",
               "test-hk-how-to/filter-data",
@@ -80,7 +80,13 @@
               "test-hk-how-to/make-chart",
               "test-hk-how-to/compose-layout"
             ]
-          }
+          },
+          {
+            "group": "Details",
+            "pages": [
+              "test-hk-how-to/table-options"
+            ]
+          }          
         ]
         
       }
