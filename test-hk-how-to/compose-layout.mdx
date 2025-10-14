@@ -3,9 +3,7 @@ title: "Compose layout"
 description: "Description of your new file."
 ---
 
-### 탭
-
-다른 블록 아래에 탭 붙이기
+### Add tab to under block
 
 ```yaml
 blocks:
@@ -18,102 +16,31 @@ blocks:
         - name: 2
 ```
 
-탭 블록 단독으로 사용하기
+### Use tab block alone
 
 ```yaml
 blocks:
   - type: tab
     tabOptions:
-      tabs: 
+      tabs:
+        - name: 1
 ```
 
-### 모달
+### Use toggle block
 
 ```yaml
 blocks:
-  - type: http
-		modals:
-		  - path: modal
-		    blocks: 
-		      - type: http
+  - type: toggle
+    name: Toggle
+    icon: tree
+    class: text-lg p-2 shadow rounded text-green-700
+    toggledClass: font-medium text-green-700 bg-green-600/10
+    # toggled: true
+    blocks:
+      - type: http
 ```
 
-테이블 필드 링크 열어서 모달 열기
-
-```yaml
-columns:
-  name:
-    openModal: modal1
-modals:
-  - path: modal1
-```
-
-필드 버튼 눌러서 열기
-
-```yaml
-columns:
-  name:
-    buttons:
-      - label: button
-        openModal: modal1
-modals:
-  - path: modal1
-```
-
-액션 버튼으로 열기
-
-```yaml
-actions:
-  - label: modal
-    single: true
-    openModal: modal1
-modals:
-  - path: modal1
-```
-
-### Popper
-
-컬럼 버튼 클릭해서 Popper 열기
-
-```yaml
-type: http
-columns:
-  id:
-    buttons:
-      - label: 조회
-        openPopper: true
-        popperOptions:
-          placement: right
-        popperStyle:
-          width: 500px
-          overflow: auto
-          padding: 20px
-```
-
-액션 버튼 클릭해서 Popper 열기
-
-```yaml
-type: http
-actions:
-  - label: 조회
-    single: true
-    openPopper: true
-```
-
-### Toggle
-
-```yaml
-type: toggle
-name: Toggle
-icon: tree
-class: text-lg p-2 shadow rounded text-green-700
-toggledClass: font-medium text-green-700 bg-green-600/10
-# toggled: true
-blocks:
-  - type: http
-```
-
-### 심플 레이아웃
+### Use defined layout block
 
 ```yaml
 blocks:
@@ -124,7 +51,7 @@ blocks:
   - type: bottom
 ```
 
-### 커스텀 레이아웃
+### Set custom layout
 
 ```yaml
 layout:

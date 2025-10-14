@@ -3,9 +3,39 @@ title: "Make a chart"
 description: "Description of your new file."
 ---
 
-### 기본 차트
+### Basic chart
+
+```yaml
+blocks:
+  - type: http
+    chartOptions:
+      type: bar # line, doughnut, polarArea
+      x: type
+      y: count
+    showButtonWithResult: true
+```
+
+### Set multiple y-axis
 
 ```yaml
 chartOptions:
-  enabled: true
+  type: bar
+  x: date
+  y: 
+    - company
+    - user
+```
+
+### Change background color of chart
+
+```yaml
+chartOptions:
+  type: bar
+  x: date
+  y: 
+    - company
+    - user
+  backgroundColor:
+    company: "RoyalBlue"
+    user: "#0D6EFD"
 ```

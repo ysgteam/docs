@@ -3,36 +3,28 @@ title: "Run actions"
 description: "Description of your new file."
 ---
 
-### 기본 틀
-
-```yaml
-blocks:
-actions:
-  - label: button
-    type: http
-    placement: top right
-```
-
 ### Add action button
 
 ```yaml
-- type: http
-  actions:
-    - label: 실행
-      # type: http
+blocks:
+  - type: http
+    actions:
+      - label: 실행
+        # type: http
 ```
 
 ### Set placement of action button
 
 ```yaml
-- type: http
-  actions:
-    - label: 실행
-      placement: top right
-      # placement: left botom
+blocks:
+  - type: http
+    actions:
+      - label: 실행
+        placement: top right
+        # placement: left botom
 ```
 
-### 단독 실행
+### Run action in single
 
 ```yaml
 actions:
@@ -40,7 +32,7 @@ actions:
     single: true
 ```
 
-### 테이블 데이터 선택후 실행
+### Run action with selected rows
 
 ```yaml
 actions:
@@ -50,7 +42,7 @@ selectOptions:
   enabled: true
 ```
 
-### 액션 실행후 처리
+### Control after action run
 
 ```yaml
 actions:
