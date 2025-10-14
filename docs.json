@@ -84,7 +84,9 @@
           {
             "group": "Details",
             "pages": [
-              "test-hk-how-to/table-options"
+              "test-hk-how-to/table-options",
+              "test-hk-how-to/column-options",
+              "test-hk-how-to/set-navigation"
             ]
           }          
         ]
