@@ -3,20 +3,24 @@ title: "Filter data"
 description: "Description of your new file."
 ---
 
-### 기본 틀
-
-Filter data with input field
+### Filter data with input field
 
 ```yaml
 blocks:
   - type: http
-    method: get
-    fetchFn:
+    method: GET
+    fetchFn: |
+      const q = name || 'all'
+      return [
+        { id: 1, keyword: q, result: 'mock-1' },
+        { id: 2, keyword: q, result: 'mock-2' }
+      ]
     params:
-      - key: name      
+      - key: name
+        placeholder: 검색어 입력
 ```
 
-### 입력 포맷
+### Set input format
 
 ```yaml
 params:
@@ -24,7 +28,7 @@ params:
     format: date
 ```
 
-### 필터 꾸미기
+### Styling filter
 
 ```yaml
 display: form
@@ -34,7 +38,7 @@ params:
   - key: email
 ```
 
-### 여러 블록 한번에 필터
+### Filter multiple blocks
 
 ```yaml
 params:
@@ -44,7 +48,7 @@ blocks:
   - type: http
 ```
 
-### Table search in client-level
+### Search table in client-level
 
 ```yaml
 type: http
@@ -52,7 +56,7 @@ searchOptions:
   enabled: true
 ```
 
-### Column search in client-level
+### Filter column in client-level
 
 ```yaml
 type: http
@@ -62,7 +66,7 @@ columns:
       enabled: true
 ```
 
-### Table pagination in client-level
+### Paginate table in client-level
 
 ```yaml
 type: http
@@ -70,7 +74,7 @@ paginationOptions:
   enabled: true
 ```
 
-### Table sorting
+### Sorting table
 
 ```yaml
 type: http
