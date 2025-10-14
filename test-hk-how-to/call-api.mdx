@@ -47,27 +47,12 @@ blocks:
       perPage: 3
 ```
 
----
-
-### GET 요청
+### Filter by input parameter
 
 ```yaml
 blocks:
   - type: http
-    method: get
-    fetchFn: |
-      return [
-        { id: 1, name: 'Alice' },
-        { id: 2, name: 'Bob' }
-      ]
-```
-
-### 파라미터로 필터링
-
-```yaml
-blocks:
-  - type: http
-    method: get
+    method: GET
     fetchFn: |
       const q = name || 'all'
       return [
@@ -79,12 +64,12 @@ blocks:
         placeholder: 검색어 입력
 ```
 
-### 에러 처리
+### Error handling
 
 ```yaml
 blocks:
   - type: http
-    method: get
+    method: GET
     fetchFn: |
       if (!q) {
         return { error: '검색어 없음' }
@@ -95,12 +80,12 @@ blocks:
         placeholder: 검색어
 ```
 
-### POST 요청
+### Post data from input parameter
 
 ```yaml
 blocks:
   - type: http
-    method: post
+    method: POST
     fetchFn: |
       if (!text) {
         return { error: 'text is required' }
@@ -113,43 +98,4 @@ blocks:
       - key: text
         label: 텍스트 입력
         format: textarea
-```
-
-### 페이지네이션
-
-```yaml
-blocks:
-  - type: http
-    method: get
-    mode: remote
-    fetchFn: |
-      const items = Array.from({length: 20}).map((_,i)=>({
-        id: i+1, name: `Item-${i+1}`
-      }))
-      const limit = page_limit || 5
-      const page = page_number || 1
-      const offset = (page-1)*limit
-      return {
-        message: 'ok',
-        rows: items.slice(offset, offset+limit),
-        total: items.length,
-      }
-    paginationOptions:
-      enabled: true
-      perPage: 5
-```
-
-### 세션, 환경변수
-
-```yaml
-blocks:
-  - type: http
-    method: get
-    fetchFn: |
-      console.log('session.email=', session.email)
-      console.log('PUBLIC_API_URL=', PUBLIC_API_URL)
-      return [
-        { key: 'email', value: session.email || 'mock@local' },
-        { key: 'env', value: PUBLIC_API_URL || '<http://mock.api>' }
-      ]
 ```
