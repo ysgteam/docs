@@ -86,7 +86,9 @@
             "pages": [
               "test-hk-how-to/table-options",
               "test-hk-how-to/column-options",
-              "test-hk-how-to/set-navigation"
+              "test-hk-how-to/set-navigation",
+              "test-hk-how-to/read-related-data",
+              "test-hk-how-to/update-data"
             ]
           }          
         ]

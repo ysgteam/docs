@@ -1,0 +1,56 @@
+---
+title: "Read related data"
+description: "Description of your new file."
+---
+
+### 모달로 조회
+
+```
+type: http
+columns:
+  id:
+    openModal: modal1-:id
+modals:
+  - path: modal1-:id
+    blocks:
+      - type: http
+        params:
+          - key: id
+            valueFromRow: id
+```
+
+### 탭에서 조회
+
+```
+type: http
+tabOptions:
+  tabs:
+    - name: 1
+      blocks:
+        - type: http
+          params:
+            - key: id
+              valueFromRow: id
+```
+
+### 다른 블록에서 조회(레이아웃)
+
+```
+- type: left
+  columns:
+    id:
+      updateParams:
+        id2: "{{id}}"
+- type: right
+  params:
+    - key: id2
+```
+
+### 페이지 이동해서 조회
+
+```
+type: http
+params:
+  - key: id
+    valueFromSearch: id
+```

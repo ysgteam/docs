@@ -1,0 +1,41 @@
+---
+title: "Update data interface"
+description: "Description of your new file."
+---
+
+### 컬럼에서 바로 수정하기
+
+```yaml
+type: http
+columns:
+  product_name:
+    updateOptions:
+      type: http
+      method: POST
+      fetchFn: |
+        // Code...    
+```
+
+### 버튼 클릭, 모달 열어서 수정하기
+
+```yaml
+type: http
+columns:
+  product_name:
+    buttons:
+      - label: 수정
+        openModal: edit-:id
+modals:
+  - path: edit-:id
+    blocks:
+      - type: http
+        method: POST
+        fetchFn: |
+          // Code...
+        params:
+          - key: id
+            valueFromRow: id
+          - key: product_name
+            defaultValueFromRow: product_name
+        # confirm...        
+```

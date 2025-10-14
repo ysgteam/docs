@@ -1,5 +1,117 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Column options"
+description: "Description of your new file."
 ---
 
+데이터 컬럼 세부사항을 설정할 수 있나요?
+
+### 컬럼 데이터 포맷 설정
+
+- 컬럼 데이터 포맷 설정
+
+```
+columns:
+  url:
+    format: url
+  image:
+    format: image
+  json:
+    format: json
+  json2:
+    format: table
+  content:
+    format: viewer
+```
+
+### 컬럼 데이터 커스텀 조작
+
+- 컬럼 데이터 커스텀 조작
+
+```
+columns:
+  name:
+    formatFn: |
+```
+
+### 컬럼 데이터 HTML로 표현
+
+- 컬럼 데이터 HTML로 표현
+
+```
+columns:
+  name:
+    template: |
+```
+
+### 컬럼 스타일 설정
+
+- 컬럼 스타일 설정
+
+```
+columns:
+  name:
+    width: 200px
+```
+
+### 컬럼에 버튼 추가
+
+- 컬럼에 버튼 추가 (가능한곳 제한)
+
+```
+columns:
+  name:
+    buttons:
+      - label: 조회
+```
+
+### 컬럼 숨기기
+
+- 컬럼 숨기기
+
+```
+columns:
+  name:
+    hidden: true
+```
+
+### 컬럼 아래에 다른 컬럼 값 가져오기
+
+- 컬럼 아래에 다른 컬럼 값 가져오기 (가능한곳 제한)
+
+```
+columns:
+  id:
+    subtitle: name
+  name:
+    hidden: true
+```
+
+### 컬럼 값 라벨링
+
+- 컬럼 값 라벨링
+
+```
+columns:
+  status:
+    valueAs:
+      active: 활성
+      inactive: 비활성      
+```
+
+### 컬럼 값 색상
+
+- 컬럼 값 색상 (가능한곳 제한)
+
+```
+columns:
+  status:
+    color:
+      active: green
+      inactive: red
+```
+
+```
+columns:
+  status:
+    colorFn: |
+```
