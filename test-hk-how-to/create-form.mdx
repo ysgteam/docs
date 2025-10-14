@@ -3,7 +3,7 @@ title: "Create a form"
 description: "Description of your new file."
 ---
 
-### 기본 형식
+### Basic form
 
 ```yaml
 blocks:
@@ -12,32 +12,19 @@ blocks:
     fetchFn: 
     params:
       - key: name
-      - key: is_guest
+      - key: memo
+    display: form
 ```
 
-```yaml
-- type: http
-  method: POST
-  params:
-    - key: name
-    - key: email
-    - key: memo
-  display: form
-```
-
-### 입력 포맷
+### Set input format
 
 ```yaml
 params:
-  - key: description
+  - key: memo
     format: textarea
 ```
 
-### 고급 입력 포맷
-
-- reference 참고
-
-### Form 꾸미기
+### Group and styling form
 
 ```yaml
 params:
@@ -49,30 +36,13 @@ params:
     style:
       width: 100%
   - key: email
-```
-
-```yaml
 display: form
 formOptions:
   firstLabelWidth: 120px
   labelWidth: 100px
-params:
-  - key: name
-    group: 1
-  - key: email
-    group: 1
-  - key: memo
 ```
 
-### Form 제출 전 검증
-
-```yaml
-params:
-  - key: email
-    validateFn:
-submitButton:
-  disabledFn: 
-```
+### Validate input
 
 브라우저 단에서 input 검증(validate) - 입력 값 가이드 역할
 
@@ -92,9 +62,12 @@ params:
       return '';
 ```
 
+### Disable button by condition with JS
+
 값이 알맞지 않을때 제출 버튼 비활성화
 
 ```yaml
+params:
 display: form
 submitButton: 
   disabledFn: |
@@ -107,7 +80,7 @@ submitButton:
     return false
 ```
 
-### Form 제출 후 액션
+### Controls after form submit
 
 ```yaml
 params:
