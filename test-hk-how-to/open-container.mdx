@@ -1,0 +1,85 @@
+---
+title: "Open container"
+description: "Description of your new file."
+---
+
+### Use modal container
+
+```yaml
+blocks:
+  - type: http
+	modals:
+      - path: modal
+        blocks: 
+          - type: http
+```
+
+### Open modal by table field link
+
+테이블 필드 링크 열어서 모달 열기
+
+```yaml
+columns:
+  name:
+    openModal: modal1
+modals:
+  - path: modal1
+```
+
+### Open modal by table field button
+
+필드 버튼 눌러서 열기
+
+```yaml
+columns:
+  name:
+    buttons:
+      - label: button
+        openModal: modal1
+modals:
+  - path: modal1
+```
+
+### Open modal by action button
+
+액션 버튼으로 열기
+
+```yaml
+actions:
+  - label: modal
+    single: true
+    openModal: modal1
+modals:
+  - path: modal1
+```
+
+### Open popper by table field button
+
+컬럼 버튼 클릭해서 Popper 열기
+
+```yaml
+type: http
+columns:
+  id:
+    buttons:
+      - label: 조회
+        openPopper: true
+        popperOptions:
+          placement: right
+        popperStyle:
+          width: 500px
+          overflow: auto
+          padding: 20px
+```
+
+### Open popper by action button
+
+액션 버튼 클릭해서 Popper 열기
+
+```yaml
+type: http
+actions:
+  - label: 조회
+    single: true
+    openPopper: true
+```
