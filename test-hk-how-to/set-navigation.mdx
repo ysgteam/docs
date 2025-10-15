@@ -5,30 +5,42 @@ description: "Description of your new file."
 
 ### breadcrumb
 
-- `type: header`
+`type: header`
 
 ```yaml
-type: header
+blocks:
+  - type: header # 사이트 이동 경로(breadcrumb) 표시 영역
+    items:
+    - path: company
+      label: 업체목록
+      icon: home
+    - label: 업체상세
 ```
+
+- 지원하는 아이콘(`icon` ): [**https://pictogrammers.github.io/@mdi/font/7.2.96/**](https://pictogrammers.github.io/@mdi/font/7.2.96/)
+- 필요한 아이콘을 찾기 쉬운 사이트: [**https://pictogrammers.com/library/mdi/**](https://pictogrammers.com/library/mdi/)
 
 ### Move to another page
 
+`columns.[name].openPage`
+
 - 내부 페이지 이동
-  - `columns.<name>.openPage`
 
 ```yaml
 columns:
-  id:
-    openPage: 
+  user_id:
+    openPage: orders?user_id={{user_id}}
 ```
 
 ### Move to external page
 
+`columns.[name].openUrl`
+
 - 외부 링크로 이동
-  - `columns.<name>.openUrl`
 
 ```yaml
 columns:
-  url:
-    openUrl: 
+  product_name:
+    openUrl: https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query={{product_name}}
+    # target: _self
 ```
