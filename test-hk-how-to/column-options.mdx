@@ -5,11 +5,84 @@ description: "Description of your new file."
 
 데이터 컬럼 세부사항을 설정할 수 있나요?
 
-### 컬럼 데이터 포맷 설정
+### Styling column
+
+- 컬럼 스타일 설정
+
+```yaml
+columns:
+  name:
+    width: 200px
+```
+
+### Add button to column
+
+- 컬럼에 버튼 추가 (가능한곳 제한)
+
+```yaml
+columns:
+  name:
+    buttons:
+      - label: 조회
+```
+
+### Hide column
+
+- 컬럼 숨기기
+
+```yaml
+columns:
+  name:
+    hidden: true
+```
+
+### Bring a column value to under the other
+
+- 컬럼 아래에 다른 컬럼 값 가져오기 (가능한곳 제한)
+
+```yaml
+columns:
+  id:
+    subtitle: name
+  name:
+    hidden: true
+```
+
+### Set label to column value
+
+- 컬럼 값 라벨링
+
+```yaml
+columns:
+  status:
+    valueAs:
+      active: 활성
+      inactive: 비활성      
+```
+
+### Color to column value
+
+- 컬럼 값 색상 (가능한곳 제한)
+
+```yaml
+columns:
+  status:
+    color:
+      active: green
+      inactive: red
+```
+
+```yaml
+columns:
+  status:
+    colorFn: |
+```
+
+### Change display of column value
 
 - 컬럼 데이터 포맷 설정
 
-```
+```yaml
 columns:
   url:
     format: url
@@ -23,95 +96,22 @@ columns:
     format: viewer
 ```
 
-### 컬럼 데이터 커스텀 조작
+### Manipulate column value by JavaScript
 
 - 컬럼 데이터 커스텀 조작
 
-```
+```yaml
 columns:
   name:
     formatFn: |
 ```
 
-### 컬럼 데이터 HTML로 표현
+### Display column value with HTML
 
 - 컬럼 데이터 HTML로 표현
 
-```
+```yaml
 columns:
   name:
     template: |
-```
-
-### 컬럼 스타일 설정
-
-- 컬럼 스타일 설정
-
-```
-columns:
-  name:
-    width: 200px
-```
-
-### 컬럼에 버튼 추가
-
-- 컬럼에 버튼 추가 (가능한곳 제한)
-
-```
-columns:
-  name:
-    buttons:
-      - label: 조회
-```
-
-### 컬럼 숨기기
-
-- 컬럼 숨기기
-
-```
-columns:
-  name:
-    hidden: true
-```
-
-### 컬럼 아래에 다른 컬럼 값 가져오기
-
-- 컬럼 아래에 다른 컬럼 값 가져오기 (가능한곳 제한)
-
-```
-columns:
-  id:
-    subtitle: name
-  name:
-    hidden: true
-```
-
-### 컬럼 값 라벨링
-
-- 컬럼 값 라벨링
-
-```
-columns:
-  status:
-    valueAs:
-      active: 활성
-      inactive: 비활성      
-```
-
-### 컬럼 값 색상
-
-- 컬럼 값 색상 (가능한곳 제한)
-
-```
-columns:
-  status:
-    color:
-      active: green
-      inactive: red
-```
-
-```
-columns:
-  status:
-    colorFn: |
 ```

@@ -3,9 +3,13 @@ title: "Read related data"
 description: "Description of your new file."
 ---
 
-### 모달로 조회
+### Get related data in modal with parameter 
 
-```
+`modals`, `openModal`
+
+- 모달로 조회
+
+```yaml
 type: http
 columns:
   id:
@@ -19,9 +23,13 @@ modals:
             valueFromRow: id
 ```
 
-### 탭에서 조회
+### Get data in tab with parameter
 
-```
+`tabOptions` , `tabs`
+
+- 탭에서 조회
+
+```yaml
 type: http
 tabOptions:
   tabs:
@@ -33,9 +41,13 @@ tabOptions:
               valueFromRow: id
 ```
 
-### 다른 블록에서 조회(레이아웃)
+### Reload data after updating parameter of another block
 
-```
+`updateParams`
+
+- 다른 블록에서 조회(레이아웃)
+
+```yaml
 - type: left
   columns:
     id:
@@ -46,11 +58,23 @@ tabOptions:
     - key: id2
 ```
 
-### 페이지 이동해서 조회
+### Send parameter to another page
 
-```
-type: http
-params:
-  - key: id
-    valueFromSearch: id
+`valueFromSearch`
+
+페이지 이동해서 조회
+
+```yaml
+columns:
+  id:
+    openPage: value-from-search-:id
+
+---
+pages:
+  - path: value-from-search-:id
+    blocks:
+      - type: http
+        params:
+          - key: id
+            valueFromSearch: id
 ```
