@@ -32,16 +32,6 @@ params:
       - Rosé Brut
 ```
 
-### Styling filter
-
-```yaml
-display: form
-# display: col
-params:
-  - key: name
-  - key: email
-```
-
 ### Filter multiple blocks
 
 ```yaml
@@ -87,4 +77,32 @@ sortOptions:
   initialSortBy:
     field: created_at
     type: desc # desc, asc
+```
+
+### Group input filter
+
+```yaml
+params:
+  - key: name
+    group: 1
+  - key: email
+    group: 2
+  - key: phone
+    group: 2
+```
+
+### Styling filter
+
+```yaml
+params:
+  - key: name
+    group: 1
+  - key: email
+    group: 2
+  - key: phone
+    group: 2
+formOptions:
+  display: col # inline, form
+  firstLabelWidth: 120px
+  labelWidth: 120px
 ```
