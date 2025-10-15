@@ -1,9 +1,11 @@
 ---
 title: "Filter data"
-description: "Description of your new file."
+description: "필터, 테이블 정렬 등을 이용해 필요한 데이터를 조회할 수 있습니다."
 ---
 
 ### Filter data with input field
+
+- `params`
 
 ```yaml
 blocks:
@@ -22,6 +24,9 @@ blocks:
 
 ### Set input format and component
 
+- `params.format: date`
+- `params.dropdown`
+
 ```yaml
 params:
   - key: date
@@ -34,15 +39,21 @@ params:
 
 ### Filter multiple blocks
 
+- `pages.params`
+
 ```yaml
-params:
-  - key: name
-blocks:
-  - type: http
-  - type: http
+pages:
+  - path: multiple-blocks
+    params:
+      - key: name
+    blocks:
+      - type: http
+      - type: http
 ```
 
 ### Search table in client-level
+
+- `searchOptions`
 
 ```yaml
 type: http
@@ -51,6 +62,8 @@ searchOptions:
 ```
 
 ### Filter column in client-level
+
+- `columns.[name].filterOptions`
 
 ```yaml
 type: http
@@ -62,6 +75,8 @@ columns:
 
 ### Paginate table in client-level
 
+- `paginationOptions`
+
 ```yaml
 type: http
 paginationOptions:
@@ -69,6 +84,8 @@ paginationOptions:
 ```
 
 ### Sorting table
+
+- `sortOptions`
 
 ```yaml
 type: http
@@ -81,6 +98,8 @@ sortOptions:
 
 ### Group input filter
 
+- `params.group`
+
 ```yaml
 params:
   - key: name
@@ -91,7 +110,9 @@ params:
     group: 2
 ```
 
-### Styling filter
+### Styling filter group
+
+- `formOptions.display`
 
 ```yaml
 params:
