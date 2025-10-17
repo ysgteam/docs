@@ -114,10 +114,10 @@ Payload 예시:
 
 ### Troubleshooting
 
-| Issue                           | Cause                          |
-| ------------------------------- | ------------------------------ |
-| `SELECT_ACCESS_TOKEN` undefined | `JWT_SECRET` 미설정               |
-| `API` undefined                 | Env 값 누락 또는 환경 미선택             |
-| 검증 실패                           | 서버와 클라이언트 Secret 불일치           |
-| `CORS error`                    | 백엔드 CORS Origin 미등록            |
-| 토큰 미도착                          | 프록시/게이트웨이에서 `x-select-jwt` 제거됨 |
+
+| Issue                           | Cause                   |
+| ------------------------------- | ----------------------- |
+| `SELECT_ACCESS_TOKEN` undefined | `JWT_SECRET` 미설정        |
+| `API` undefined                 | Env 값 누락 또는 환경 체크박스 미선택 |
+| `401 / 403`                     | 서버 Secret 불일치 또는 토큰 누락  |
+| `CORS error`                    | 백엔드 CORS Origin 미등록     |
