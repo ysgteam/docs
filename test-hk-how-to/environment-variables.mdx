@@ -7,11 +7,11 @@ description: "사용할 수 있는 시스템 변수와 사용자 정의 환경�
 
 셀렉트가 자동으로 주입하는 기본 변수입니다. JWT 기반 인증 토큰(`SELECT_ACCESS_TOKEN`)은 `JWT_SECRET` 설정 시 자동 발급됩니다.
 
-| Key                   | Description                              |
-| --------------------- | ---------------------------------------- |
-| `SELECT_ACCESS_TOKEN` | JWT 토큰 (프로젝트 > 기본 정보 > JWT_SECRET 설정 필요) |
-| `SELECT_USER_ID`      | 로그인 사용자 ID                               |
-| `SELECT_USER_EMAIL`   | 로그인 사용자 이메일                              |
+| Key                   | Description                                |
+| --------------------- | ------------------------------------------ |
+| `SELECT_ACCESS_TOKEN` | JWT 토큰 (프로젝트 \> 기본 정보 \> JWT_SECRET 설정 필요) |
+| `SELECT_USER_ID`      | 로그인 사용자 ID                                 |
+| `SELECT_USER_EMAIL`   | 로그인 사용자 이메일                                |
 
 ```yaml
 blocks:
@@ -92,15 +92,13 @@ blocks:
 
 ### JWT SECRET
 
-`프로젝트 → 기본 정보 → JWT_SECRET` 설정 시 JWT 토큰이 생성됩니다.
-클라이언트와 서버 모두 동일한 Secret을 사용해야 검증이 통과됩니다.
+`프로젝트 → 기본 정보 → JWT_SECRET` 설정 시 JWT 토큰이 생성됩니다. 클라이언트와 서버 모두 동일한 Secret을 사용해야 검증이 통과됩니다.
 
 ```txt
 JWT SECRET: 123
 ```
 
-검증 예시 ([jwt.io](https://jwt.io))
-Secret이 일치할 때만 “Valid JWT”로 표시됩니다.
+검증 예시 ([jwt.io](https://jwt.io)) Secret이 일치할 때만 “Valid JWT”로 표시됩니다.
 
 Payload 예시:
 
@@ -125,7 +123,7 @@ Payload 예시:
 
 ### Quick Check
 
-문서보다 빠른 방법:
+셀렉트 페이지에서 브라우저 콘솔로 바로 확인하는 방법:
 
 ```yaml
 blocks:
