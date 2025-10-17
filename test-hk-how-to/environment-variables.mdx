@@ -1,0 +1,113 @@
+---
+title: "Environment Variables"
+description: "fetchFn에서 사용할 수 있는 시스템 변수와 사용자 정의 환경변수를 설명합니다. params로 즉시 확인 가능하며, API 호출·인증에 활용할 수 있습니다."
+---
+
+### User-defined Variables (Env)
+
+`Front Admin / Pages → Env` 탭에서 Key-Value 형태로 등록. 환경별(Production/Development)로 구분 가능.
+
+```yaml
+Key: API
+Value: http://localhost:9500
+```
+
+모든 Env 변수는 자동으로 `params`에 포함되며, `params.API` 또는 단순히 `API`로 직접 접근할 수 있습니다.
+
+```yaml
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      console.log({ params })
+      return [
+        { key: 'API', value: API },
+        { key: 'EMAIL', value: SELECT_USER_EMAIL },
+      ]
+```
+
+출력 예시:
+
+```js
+{
+  API: "http://localhost:9500",
+  SELECT_ACCESS_TOKEN: "eyJhbGciOiJIUzI1NiIs...",
+  SELECT_USER_EMAIL: "1015@test.com",
+  SELECT_USER_ID: 372
+}
+```
+
+### Call API with Token
+
+JWT 토큰(`SELECT_ACCESS_TOKEN`)을 헤더에 포함해 인증 API를 호출합니다.
+
+```yaml
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      const r = await axios({
+        url: `${API}/sample-api/wines`,
+        headers: { Authorization: `Bearer ${SELECT_ACCESS_TOKEN}` },
+      })
+      return r.data.rows
+```
+
+또는 params 구조 분해로 사용:
+
+```yaml
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      const { API, SELECT_ACCESS_TOKEN } = params
+      const r = await axios({
+        url: `${API}/sample-api/wines`,
+        headers: { Authorization: `Bearer ${SELECT_ACCESS_TOKEN}` },
+      })
+      return r.data.rows
+```
+
+### JWT SECRET
+
+`프로젝트 → 기본 정보 → JWT_SECRET` 설정 시 JWT 토큰이 생성됩니다. 클라이언트와 서버 모두 동일한 Secret을 사용해야 검증이 통과됩니다.
+
+```txt
+JWT SECRET: 123
+```
+
+검증 예시 ([jwt.io](https://jwt.io)) Secret이 일치할 때만 “Valid JWT”로 표시됩니다.
+
+Payload 예시:
+
+```json
+{
+  "id": 372,
+  "email": "1015@test.com",
+  "role": "admin",
+  "iat": 1766957569,
+  "exp": 1766856769
+}
+```
+
+### Troubleshooting
+
+| Issue                           | Cause                   |
+| ------------------------------- | ----------------------- |
+| `SELECT_ACCESS_TOKEN` undefined | `JWT_SECRET` 미설정        |
+| `API` undefined                 | Env 값 누락 또는 환경 체크박스 미선택 |
+| `401 / 403`                     | 서버 Secret 불일치 또는 토큰 누락  |
+| `CORS error`                    | 백엔드 CORS Origin 미등록     |
+
+### Quick Check
+
+문서보다 빠른 방법:
+
+```yaml
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      console.log({ params }) // 사용 가능한 모든 키 확인
+      return params
+```
