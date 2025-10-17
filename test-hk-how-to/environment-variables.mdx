@@ -1,7 +1,29 @@
 ---
 title: "Environment Variables"
-description: "fetchFn에서 사용할 수 있는 시스템 변수와 사용자 정의 환경변수를 설명합니다. params로 즉시 확인 가능하며, API 호출·인증에 활용할 수 있습니다."
+description: "사용할 수 있는 시스템 변수와 사용자 정의 환경변수를 설명합니다. params로 즉시 확인 가능하며, API 호출·인증에 활용할 수 있습니다."
 ---
+
+### System Variables
+
+셀렉트가 자동으로 주입하는 기본 변수입니다. JWT 기반 인증 토큰(`SELECT_ACCESS_TOKEN`)은 `JWT_SECRET` 설정 시 자동 발급됩니다.
+
+| Key                   | Description                              |
+| --------------------- | ---------------------------------------- |
+| `SELECT_ACCESS_TOKEN` | JWT 토큰 (프로젝트 > 기본 정보 > JWT_SECRET 설정 필요) |
+| `SELECT_USER_ID`      | 로그인 사용자 ID                               |
+| `SELECT_USER_EMAIL`   | 로그인 사용자 이메일                              |
+
+```yaml
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      return [
+        { key: 'USER_EMAIL', value: SELECT_USER_EMAIL },
+        { key: 'USER_ID', value: SELECT_USER_ID },
+        { key: 'ACCESS_TOKEN', value: SELECT_ACCESS_TOKEN },
+      ]
+```
 
 ### User-defined Variables (Env)
 
@@ -70,13 +92,15 @@ blocks:
 
 ### JWT SECRET
 
-`프로젝트 → 기본 정보 → JWT_SECRET` 설정 시 JWT 토큰이 생성됩니다. 클라이언트와 서버 모두 동일한 Secret을 사용해야 검증이 통과됩니다.
+`프로젝트 → 기본 정보 → JWT_SECRET` 설정 시 JWT 토큰이 생성됩니다.
+클라이언트와 서버 모두 동일한 Secret을 사용해야 검증이 통과됩니다.
 
 ```txt
 JWT SECRET: 123
 ```
 
-검증 예시 ([jwt.io](https://jwt.io)) Secret이 일치할 때만 “Valid JWT”로 표시됩니다.
+검증 예시 ([jwt.io](https://jwt.io))
+Secret이 일치할 때만 “Valid JWT”로 표시됩니다.
 
 Payload 예시:
 
