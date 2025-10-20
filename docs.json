@@ -45,8 +45,8 @@
     }
   },
   "logo": {
-    "light": "/SelectAdmin_logo_light.png",
-    "dark": "/SelectAdmin_logo_dark.png"
+    "light": "/logo/SelectAdmin_logo_light.png",
+    "dark": "/logo/SelectAdmin_logo_dark.png"
   },
   "navbar": {
     "links": [
