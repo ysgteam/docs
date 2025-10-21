@@ -44,15 +44,34 @@ blocks:
 탭에서 관련 내용 조회하기
 
 ```yaml
-type: http
-tabOptions:
-  tabs:
-    - name: 1
-      blocks:
-        - type: http
-          params:
-            - key: id
-              valueFromRow: id
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      return [
+        { id: 1, name: 'hey' },
+        { id: 2, name: 'good day' }
+      ]
+    columns:
+      name:
+        updateParams:
+          name: "{{name}}"
+    tabOptions:
+      autoload: 1
+      tabs:
+        - name: tab1
+          blocks:
+            - type: http
+              method: GET
+              fetchFn: |
+                const q = name || 'all'
+                return [
+                  { id: 1, keyword: q, result: 'mock-1' },
+                  { id: 2, keyword: q, result: 'mock-2' }
+                ]
+              params:
+                - key: name
+                  valueFromRow: name
 ```
 
 ### Reload data after updating parameter of another block
