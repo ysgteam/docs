@@ -16,25 +16,31 @@
           {
             "group": "Basic",
             "pages": [
-              "test-hk-how-to/call-api",
-              "test-hk-how-to/filter-data",
-              "test-hk-how-to/create-form",
-              "test-hk-how-to/run-actions",
-              "test-hk-how-to/make-chart"
+              "how-to/call-api",
+              "how-to/filter-data",
+              "how-to/create-form",
+              "how-to/run-actions",
+              "how-to/make-chart"
             ]
           },
           {
             "group": "Details",
             "pages": [
-              "test-hk-how-to/compose-layout",
-              "test-hk-how-to/open-container",
-              "test-hk-how-to/set-navigation",              
-              "test-hk-how-to/read-related-data",
-              "test-hk-how-to/update-data",
-              "test-hk-how-to/column-options",
-              "test-hk-how-to/environment-variables"
+              "how-to/compose-layout",
+              "how-to/open-container",
+              "how-to/set-navigation",              
+              "how-to/read-related-data",
+              "how-to/update-data",
+              "how-to/column-options",
+              "how-to/environment-variables"
             ]
-          }          
+          },
+          {
+            "group": "Wrap up",
+            "pages": [
+              "how-to/core-spec"
+            ]
+          }
         ]
         
       }

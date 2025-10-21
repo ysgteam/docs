@@ -48,14 +48,33 @@ tabOptions:
 - 다른 블록에서 조회(레이아웃)
 
 ```yaml
-- type: left
-  columns:
-    id:
-      updateParams:
-        id2: "{{id}}"
-- type: right
-  params:
-    - key: id2
+blocks:
+  - type: left
+    blocks:
+      - type: http
+        method: GET
+        fetchFn: |
+          return [
+            { id: 1, name: 'Alpha' },
+            { id: 2, name: 'Bravo' },
+            { id: 3, name: 'Charlie' },
+            { id: 4, name: 'Delta' },
+            { id: 5, name: 'Echo' }
+          ];
+        columns:
+          id:
+            updateParams:
+              detail_id: "{{id}}"
+  - type: right
+    blocks:
+      - type: http
+        method: GET
+        fetchFn: |
+          if (!detail_id) return [];
+
+          return [{ id: detail_id, name: `detail-${detail_id}` }];
+        params:
+          - key: detail_id
 ```
 
 ### Send parameter to another page
