@@ -3,10 +3,10 @@
   "theme": "mint",
   "name": "Select Admin",
   "colors": {
-    "primary": "#4B5563",
-    "light": "#9CA3AF",
-    "dark": "#1F2937"
-  },
+    "primary": "#2C2E4A",
+    "light": "#5B6CB1",
+    "dark": "#1E1F3B"
+  },  
   "favicon": "/symbol_transparent.png",
   "navigation": {
     "tabs": [
