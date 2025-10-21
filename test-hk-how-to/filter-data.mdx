@@ -42,13 +42,21 @@ params:
 - `pages.params`
 
 ```yaml
-pages:
-  - path: multiple-blocks
-    params:
-      - key: name
-    blocks:
-      - type: http
-      - type: http
+params:
+  - key: name
+    placeholder: 검색어
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      const q = name?.trim() || 'all'
+      return [{ id: 1, keyword: q, result: 'srv-1' }]
+  - type: http
+    method: GET
+    fetchFn: |
+      // 동일 name 파라미터 재사용
+      const q = name?.trim() || 'all'
+      return [{ id: 2, keyword: q, result: 'srv-2' }]
 ```
 
 ### Search table in client-level

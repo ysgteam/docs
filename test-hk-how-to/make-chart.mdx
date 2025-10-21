@@ -8,8 +8,15 @@ description: "여러 차트를 통해 데이터를 시각화합니다."
 ```yaml
 blocks:
   - type: http
+    method: GET
+    fetchFn: |
+      return [
+        { type: 'A', count: 12 },
+        { type: 'B', count: 7 },
+        { type: 'C', count: 19 }
+      ]
     chartOptions:
-      type: bar # line, doughnut, polarArea
+      type: bar    # line, doughnut, polarArea
       x: type
       y: count
     showButtonWithResult: true
@@ -18,12 +25,19 @@ blocks:
 ### Set multiple y-axis
 
 ```yaml
-chartOptions:
-  type: bar
-  x: date
-  y: 
-    - company
-    - user
+blocks:
+  - type: http
+    fetchFn: |
+      return [
+        { date: '2025-10-01', company: 12, user: 30 },
+        { date: '2025-10-02', company: 18, user: 22 }
+      ]
+    chartOptions:
+      type: bar
+      x: date
+      y:
+        - company
+        - user
 ```
 
 ### Change background color of chart
