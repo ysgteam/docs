@@ -1,11 +1,9 @@
 ---
 title: "Call API"
-description: "GET, POST API를 호출하여 데이터를 조회해서 렌더링하거나, 입력 데이터 값을 전달하는 UI를 만들어 API 호출시 활용할 수 있습니다."
+description: "API로 데이터를 조회하여 렌더링하거나 입력 UI를 만들어 API 호출에 활용할 수 있습니다."
 ---
 
 ### Display rows from JSON
-
-JSON 샘플 데이터(Sample/Mock data)를 렌더링합니다.
 
 - `method: GET`
 
@@ -22,7 +20,7 @@ blocks:
 
 #### **Display rows from Fetch API**
 
-Fetch API를 활용해 데이터를 가져와 테이블로 렌더링합니다.
+Fetch API로 데이터를 가져와 테이블로 렌더링합니다.
 
 ```yaml
 blocks:
@@ -38,7 +36,7 @@ blocks:
 
 #### **Display rows from Axios API**
 
-Axios 방식으로 API를 호출 할 수 있습니다.
+Axios 방식으로 API를 호출할 수 있습니다.
 
 ```yaml
 blocks:
@@ -57,6 +55,10 @@ blocks:
 
 ### Filter by input parameter
 
+- `params.key`
+
+입력 필드를 만들어 필터 조회할 수 있습니다.
+
 ```yaml
 blocks:
   - type: http
@@ -73,6 +75,8 @@ blocks:
 ```
 
 ### Error handling
+
+JavaScript로 에러를 다룰 수 있습니다.
 
 ```yaml
 blocks:
@@ -92,6 +96,8 @@ blocks:
 
 - `method: POST`
 
+입력 값으로 POST API를 호출할 수 있습니다.
+
 ```yaml
 blocks:
   - type: http
@@ -102,7 +108,7 @@ blocks:
       }
       return {
         message: 'Post created',
-        text,
+        text
       }
     params:
       - key: text
