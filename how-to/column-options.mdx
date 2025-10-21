@@ -5,7 +5,7 @@ description: "데이터 컬럼에 버튼을 추가하거나, 값에 따라 색�
 
 ### Styling column
 
-- `columns.[name].width`
+`columns.[name].width`
 
 ```yaml
 columns:
@@ -15,7 +15,7 @@ columns:
 
 ### Add button to column
 
-- `columns.[name].buttons`
+`columns.[name].buttons`
 
 컬럼에 버튼을 추가할 수 있습니다.
 
@@ -28,7 +28,7 @@ columns:
 
 ### Hide column
 
-- `columns.[name].hidden`
+`columns.[name].hidden`
 
 ```yaml
 columns:
@@ -38,7 +38,7 @@ columns:
 
 ### Bring a column value to under the other
 
-- `columns.[name].subtitle`
+`columns.[name].subtitle`
 
 컬럼 아래에 다른 컬럼 값을 가져옵니다.
 
@@ -52,7 +52,7 @@ columns:
 
 ### Set label to column value
 
-- `columns.[name].valueAs`
+`columns.[name].valueAs`
 
 컬럼 값에 따라 라벨링을 다르게 할 수 있어요.
 
@@ -66,7 +66,7 @@ columns:
 
 ### Color to column value
 
-- `columns.[name].color`
+`columns.[name].color`
 
 컬럼 값에 따라 색상을 지정할 수 있어요.
 
@@ -89,7 +89,7 @@ columns:
 
 ### Change display of column value
 
-- `columns.[name].format`
+`columns.[name].format`
 
 다양한 컬럼 표시 데이터 포맷을 지원합니다.
 
@@ -109,19 +109,47 @@ columns:
 
 ### Manipulate column value by JavaScript
 
-- `columns.[name].formatFn`
+`columns.[name].formatFn`
 
 JavaScript로 컬럼 데이터를 커스텀 조작할 수 있습니다.
 
+- `return`이 없어도 inline으로 인식합니다.
+- `lodash` 함수를 사용할 수 있습니다.
+
 ```yaml
-columns:
-  name:
-    formatFn: |
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      return [
+        { id: 1, type: 'HOTEL', type2: 'hotel', type3: 'HOTEL', type4: 'HOTEL' },
+        { id: 2, type: 'PENSION', type2: 'pension', type3: 'PENSION', type4: 'PENSION' },
+        { id: 3, type: 'RESORT', type2: 'resort', type3: 'RESORT', type4: 'RESORT' },
+      ]
+    columns:
+      type:
+        formatFn: |
+          '$' + value
+      type2:
+        formatFn: |
+          _.capitalize(value || '')
+      type3:
+        formatFn: |
+          if (value == 'HOTEL') { return '호텔' }
+          if (value == 'PENSION') { return '펜션' }
+          if (value == 'RESORT') { return '리조트' }
+      type4:
+        formatFn: |
+          return {
+            HOTEL: '호텔',
+            PENSION: '펜션',
+            RESORT: '리조트'
+          }[value] || value
 ```
 
 ### Display column value with HTML
 
-- `columns.[name].template`
+`columns.[name].template`
 
 컬럼 데이터를 HTML로 표현할 수 있습니다.
 

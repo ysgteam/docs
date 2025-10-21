@@ -28,26 +28,18 @@
             "pages": [
               "how-to/compose-layout",
               "how-to/open-container",
-              "how-to/set-navigation",              
+              "how-to/set-navigation",
               "how-to/read-related-data",
               "how-to/update-data",
               "how-to/column-options",
               "how-to/environment-variables"
             ]
-          },
-          {
-            "group": "Wrap up",
-            "pages": [
-              "how-to/core-spec"
-            ]
           }
         ]
-        
       }
     ],
     "global": {
-      "anchors": [
-      ]
+      "anchors": []
     }
   },
   "logo": {
@@ -69,15 +61,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
