@@ -5,13 +5,26 @@ description: "컬럼이나 버튼 등을 클릭하였을때 컨텐츠를 담는 
 
 ### Use modal container
 
+모달 열기 기본 구성
+
 ```yaml
 blocks:
   - type: http
-	modals:
-      - path: modal
+    method: GET
+    fetchFn: |
+      return [
+        { id: 1, name: 'hey' },
+        { id: 2, name: 'good day' }
+      ]
+    columns:
+      name:
+        openModal: modal-:id
+	  modals:
+      - path: modal-:id
         blocks: 
-          - type: http
+          - type: markdown
+            content: |
+              open modal test
 ```
 
 ### Open modal by table field link
@@ -21,36 +34,36 @@ blocks:
 ```yaml
 columns:
   name:
-    openModal: modal1
+    openModal: modal1-:id
 modals:
-  - path: modal1
+  - path: modal1-:id
 ```
 
 ### Open modal by table field button
 
-필드 버튼 눌러서 열기
+필드 버튼 눌러서 모달 열기
 
 ```yaml
 columns:
   name:
     buttons:
       - label: button
-        openModal: modal1
+        openModal: modal1-:id
 modals:
-  - path: modal1
+  - path: modal1-:id
 ```
 
 ### Open modal by action button
 
-액션 버튼으로 열기
+액션 버튼으로 모달 열기
 
 ```yaml
 actions:
   - label: modal
     single: true
-    openModal: modal1
+    openModal: modal2
 modals:
-  - path: modal1
+  - path: modal2
 ```
 
 ### Open popper by table field button
@@ -58,18 +71,29 @@ modals:
 컬럼 버튼 클릭해서 Popper 열기
 
 ```yaml
-type: http
-columns:
-  id:
-    buttons:
-      - label: 조회
-        openPopper: true
-        popperOptions:
-          placement: right
-        popperStyle:
-          width: 500px
-          overflow: auto
-          padding: 20px
+blocks:
+  - type: http
+    method: GET
+    fetchFn: |
+      return [
+        { id: 1, name: 'hey' },
+        { id: 2, name: 'good day' }
+      ]
+    columns:
+      id:
+        buttons:
+          - label: 조회
+            openPopper: true
+            popperOptions:
+              placement: right
+            popperStyle:
+              width: 500px
+              overflow: auto
+              padding: 20px
+            blocks:
+              - type: markdown
+                content: | 
+                  open popper test
 ```
 
 ### Open popper by action button
