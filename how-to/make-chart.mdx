@@ -5,6 +5,10 @@ description: "여러 차트를 통해 데이터를 시각화합니다."
 
 ### Basic chart
 
+`chartOptions` 
+
+기본적인 차트를 만들 수 있어요.
+
 ```yaml
 blocks:
   - type: http
@@ -22,11 +26,27 @@ blocks:
     showButtonWithResult: true
 ```
 
+### Change background color of chart
+
+`backgroundColor` 
+
+```yaml
+chartOptions:
+  type: bar
+  x: date
+  y: company
+  backgroundColor:
+    company: "RoyalBlue"
+```
+
 ### Set multiple y-axis
+
+y축을 2개로 설정할 수 있습니다.
 
 ```yaml
 blocks:
   - type: http
+    method: GET
     fetchFn: |
       return [
         { date: '2025-10-01', company: 12, user: 30 },
@@ -40,16 +60,19 @@ blocks:
         - user
 ```
 
-### Change background color of chart
+y축을 좌우 다른 눈금으로 표기하고 싶은 경우
 
 ```yaml
-chartOptions:
-  type: bar
-  x: date
-  y: 
-    - company
-    - user
-  backgroundColor:
-    company: "RoyalBlue"
-    user: "#0D6EFD"
+    chartOptions:
+      type: bar
+      x: date
+      y:
+        - company
+        - user
+      data:
+        datasets:
+          - yAxisID: company
+            backgroundColor: "RoyalBlue"
+          - yAxisID: user
+            backgroundColor: "#F5F3E7"
 ```
