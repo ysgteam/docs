@@ -5,6 +5,8 @@ description: "버튼을 눌러 액션을 실행하는 방법들입니다."
 
 ### Add action button
 
+액션 버튼 추가하기
+
 ```yaml
 blocks:
   - type: http
@@ -14,6 +16,8 @@ blocks:
 ```
 
 ### Set placement of action button
+
+액션 버튼 위치를 조정합니다.
 
 ```yaml
 blocks:
@@ -26,6 +30,8 @@ blocks:
 
 ### Run action in single
 
+단독 실행 액션
+
 ```yaml
 actions:
   - type: http
@@ -34,18 +40,12 @@ actions:
 
 ### Run action with selected rows
 
+테이블의 여러 내역을 선택한 다음 액션 실행하기
+
 ```yaml
 actions:
   - type: http
     # forEach: true # 선택 행마다 순차 실행
 selectOptions:
   enabled: true
-```
-
-### Control after action run
-
-```yaml
-actions:
-  - type: http
-    responseFn: 
 ```
