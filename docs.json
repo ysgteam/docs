@@ -76,5 +76,29 @@
       "x": "https://x.com/selectfromuser",
       "linkedin": "https://linkedin.com/company/selectfromuser"
     }
-  }
+  },  
+  "links": [
+    {
+      "header": "Product",
+      "items": [
+        { "label": "보안 준수", "href": "https://selectfromuser.com/product/row-level-security" },
+        { "label": "솔루션", "href": "https://selectfromuser.com/solutions" }
+      ]
+    },
+    {
+      "header": "Service",
+      "items": [
+        { "label": "커뮤니티", "href": "https://ask.selectfromuser.com" },
+        { "label": "서비스 상태", "href": "https://status.selectfromuser.com" }
+      ]
+    },
+    {
+      "header": "Company",
+      "items": [
+        { "label": "블로그", "href": "https://blog.selectfromuser.com" },
+        { "label": "이용약관", "href": "https://selectfromuser.com/terms" },
+        { "label": "개인정보보호정책", "href": "https://selectfromuser.com/privacy" }
+      ]
+    }
+  ]
 }
