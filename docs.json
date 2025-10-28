@@ -101,5 +101,10 @@
         ]
       }
     ]    
-  }
+  },
+  "integrations": {
+      "ga4": {
+          "measurementId": "G-GB2ZCRZ12L"
+      }
+  } 
 }
