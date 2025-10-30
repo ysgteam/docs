@@ -1,0 +1,106 @@
+---
+title: "Form submission"
+---
+
+단일 폼으로 예약이나 신청을 처리하는 기본 구조 예시입니다.
+
+사용자가 서비스 유형(방문, 배송, 클래스 등)을 선택하고 필요한 정보를 입력하면 검증 후 요청을 처리합니다. 폼 입력, 필수값 검사, 주소 연동 같은 실제 서비스 신청 흐름을 단순한 구조로 이해할 수 있습니다.
+
+```yaml
+blocks:
+  - type: http
+    name: 예약/신청
+    method: POST
+    fetchFn: |
+      // 필수값 검증만
+      const st = service_type
+      const cname = String(customer_name||'').trim()
+      const when = String(date||'').trim()
+      if (!st || !cname || !when) {
+        alert('필수 정보가 누락되었습니다')
+        return { ok:false, code:400, message:'VALIDATION_FAILED' }
+      }
+      if (st === 'Delivery' && !String(address||'').trim()) {
+        alert('배송 주소를 입력하세요')
+        return { ok:false, code:400, message:'ADDRESS_REQUIRED' }
+      }
+      const rec = {
+        id: 'rsrv_' + (Date.now()) + '_' + (Math.random()*1e6|0),
+        service_type: st,
+        customer_name: cname,
+        customer_phone: String(customer_phone||'010-0000-0000'),
+        email: String(email||'').trim(),
+        date: when,
+        participants: Number(participants||1) || 1,
+        address: String(address||'서울특별시 강남구 테헤란로 152'),
+        postcode,
+        longitude,
+        latitude,
+        note: String(request_note||'현장 결제 예정'),
+        status: 'REQUESTED',
+        created_at: new Date().toISOString()
+      }
+      alert('예약 신청이 접수되었습니다')
+      return { ok:true, code:201, data: rec }
+    params:
+      - key: service_type
+        width: 800px
+        radio:
+          - Visit
+          - Delivery
+          - Class
+        radioButtonGroup: true
+        label: 서비스 유형
+        required: true
+      - key: customer_name
+        width: 800px
+        placeholder: 이름
+        label: 성함
+        required: true
+      - key: customer_phone
+        width: 800px
+        placeholder: 010-0000-0000
+        label: 전화번호
+        required: true
+      - key: email
+        width: 800px
+        placeholder: 이메일
+        label: 이메일
+      - key: date
+        width: 800px
+        format: datetime
+        validateFn: |
+          const v = param.value
+          const t = v ? Date.parse(v) : NaN
+          if (!Number.isFinite(t)) return '날짜 선택 필요'
+          return ''
+        label: 날짜
+      - key: participants
+        width: 800px
+        format: number
+        label: 참가자 수
+        min: 1
+        value: 1
+      - key: address
+        width: 800px
+        label: 주소
+        format: address
+        placeholder: 주소(Delivery일 때 필요)
+        updateParams:
+          address: roadAddress
+          postcode: zonecode
+          longitude: x
+          latitude: y
+      - key: postcode
+        hidden: true
+      - key: longitude
+        hidden: true
+      - key: latitude
+        hidden: true
+      - key: request_note
+        width: 800px
+        format: textarea
+        placeholder: 요청사항
+        label: 요청사항
+    display: form
+```
