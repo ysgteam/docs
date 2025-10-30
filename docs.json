@@ -11,10 +11,10 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "How to",
+        "tab": "Guides",
         "groups": [
           {
-            "group": "Basic",
+            "group": "Simple pages",
             "pages": [
               "how-to/call-api",
               "how-to/filter-data",
@@ -24,7 +24,7 @@
             ]
           },
           {
-            "group": "Details",
+            "group": "Advanced pages",
             "pages": [
               "how-to/compose-layout",
               "how-to/open-container",
@@ -33,6 +33,23 @@
               "how-to/update-data",
               "how-to/column-options",
               "how-to/environment-variables"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Recipes",
+        "groups": [
+          {
+            "group": "Featured",
+            "pages": [
+              
+            ]
+          },
+          {
+            "group": "All",
+            "pages": [
+              
             ]
           }
         ]
