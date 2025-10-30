@@ -1,0 +1,81 @@
+---
+title: "Layout example"
+---
+
+좌측 탭과 우측 프리뷰 패널을 가진 기본 대시보드 레이아웃 예시입니다.
+
+상단에는 날짜 기반 필터 토글이 있고, 선택한 기간에 따라 좌측 탭의 데이터가 바뀐다. 좌측 탭은 요약 데이터(A)와 비어 있는 탭(B)로 구성되며, 우측은 주요 지표나 트렌드 프리뷰를 단순 mock 데이터로 보여줍니다.
+
+레이아웃 구성, 토글 필터, 탭/패널 분할 구조를 이해하기 위한 기본 형태입니다.
+
+```yaml
+layout:
+  style:
+    margin: 0 auto
+    display: flex
+    flex-wrap: wrap
+  div:
+    - name: header
+      style: { width: 100% }
+    - name: left
+      style: { width: 50%, padding-right: 12px }
+    - name: right
+      style: { width: 50% }
+blocks:
+  - layout: header
+    type: toggle
+    name: 고급 필터
+    blocks:
+      - type: http
+        method: GET
+        fetchFn: |
+          return [{ range: `${from||'2025-10-01'} - ${to||'2025-10-23'}`, k: 'v' }]
+        params:
+          - key: from
+            format: date
+          - key: to
+            format: date
+  - layout: left
+    type: tab
+    tabOptions:
+      autoload: 1
+      tabs:
+        - name: A
+          blocks:
+            - type: markdown
+              content: |
+                Block A
+            - type: http
+              method: GET
+              fetchFn: |
+                const f = from || '2025-10-01'
+                const t = to   || '2025-10-23'
+                return [
+                  { name: '요약', 기간: `${f}~${t}`, 항목: '주문건수', 값: 128 },
+                  { name: '요약', 기간: `${f}~${t}`, 항목: '신규고객', 값: 34 },
+                  { name: '요약', 기간: `${f}~${t}`, 항목: '환불건수', 값: 7 },
+                  { name: '요약', 기간: `${f}~${t}`, 항목: '객단가',  값: 27800 },
+                  { name: '요약', 기간: `${f}~${t}`, 항목: '재방문',  값: 19 }
+                ]
+              params:
+                - key: from
+                  hidden: true
+                - key: to
+                  hidden: true
+        - name: B
+          blocks:
+            - type: markdown
+              content: |
+                Block B - no content
+  - layout: right
+    type: http
+    method: GET
+    fetchFn: |
+      return [
+        { name: '베스트 상품', metric: 'SKU', value: 'KR-TEE-001' },
+        { name: '급상승 키워드', metric: '검색', value: '가을 후드' },
+        { name: 'CS 응답시간', metric: '분', value: 3.8 },
+        { name: 'TOP 지역', metric: '지역', value: '서울·경기' },
+        { name: 'NPS', metric: '점수', value: 62 }
+      ]
+```

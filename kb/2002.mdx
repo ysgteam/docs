@@ -1,5 +1,117 @@
 ---
-title: 'New file'
-description: 'Description of your new file.'
+title: "Customer Drilldown"
 ---
 
+상단 테이블에서 고객을 선택하면 `customer_id`로 `id`가 전달되어 하단 탭이 해당 고객의 개요·주문·메모를 로드하는 드릴다운 기본 패턴입니다.
+
+검색·등급 필터로 목록을 좁히고, 탭은 자동 로드로 연속 탐색을 지원합니다. 리스트 → 파라미터 전달 → 세부 탭 조회 흐름을 볼 수 있습니다.
+
+```yaml
+blocks:
+  - type: top
+    style: |
+      border: 0  
+    blocks:
+      - type: http
+        method: GET
+        fetchFn: |
+          const base = [
+            { id: 101, name: '김하나', email: 'hana@seoulsaas.kr', tier: 'vip' },
+            { id: 102, name: '이준오', email: 'juno@marketplace.kr', tier: 'regular' },
+            { id: 103, name: '박민지', email: 'minji@brand.co.kr', tier: 'regular' },
+            { id: 104, name: '최아린', email: 'arin@studio.kr', tier: 'vip' },
+            { id: 105, name: '한두리', email: 'duri@commerce.kr', tier: 'regular' }
+          ]
+
+          const k = (keyword || '').toLowerCase().trim()
+          const t = tier && tier !== 'all' ? tier : null
+
+          return base.filter(r =>
+            (!t || r.tier === t) &&
+            (!k || (r.name + r.email).toLowerCase().includes(k))
+          )
+        columns:
+          id:
+            updateParams:
+              customer_id: "{{id}}"
+          name:
+        params:
+          - key: keyword
+            placeholder: 이름/이메일          
+          - key: tier
+            dropdown: 
+              - '': all
+              - vip
+              - regular
+
+  - type: top
+    style: |
+      border: 0
+    blocks:
+      - type: tab
+        params:
+          - key: customer_id
+            hidden: true  
+        tabOptions:
+          autoload: 1
+          tabs:
+            - name: 개요
+              blocks:
+                - type: http
+                  method: GET
+                  fetchFn: |
+                    if (!customer_id) return []
+                    const profiles = {
+                      101: { name: '김하나', tier: 'vip', phone: '010-1234-5678', region: '서울 강남', last_order_at: '2025-10-18', total_spent: 642000 },
+                      102: { name: '이준오', tier: 'regular', phone: '010-2222-7810', region: '경기 성남', last_order_at: '2025-10-21', total_spent: 198000 },
+                      103: { name: '박민지', tier: 'regular', phone: '010-3030-9900', region: '서울 마포', last_order_at: '2025-10-22', total_spent: 284000 },
+                      104: { name: '최아린', tier: 'vip', phone: '010-4444-3388', region: '부산 해운대', last_order_at: '2025-10-17', total_spent: 512000 },
+                      105: { name: '한두리', tier: 'regular', phone: '010-5555-9042', region: '대구 수성', last_order_at: '2025-10-15', total_spent: 97000 }
+                    }
+                    const p = profiles[customer_id]
+                    return p ? [{ id: customer_id, ...p }] : []
+            - name: 주문내역
+              blocks:
+                - type: http
+                  method: GET
+                  fetchFn: |
+                    if (!customer_id) return []
+                    const cid = Number(customer_id)
+                    const orders = {
+                      101: [
+                        { id: 9001, customer_id: cid, total: 42000, status: 'paid', created_at: '2025-10-17', item: '에코백' },
+                        { id: 9002, customer_id: cid, total: 89000, status: 'paid', created_at: '2025-10-20', item: '데스크 매트' },
+                        { id: 9003, customer_id: cid, total: 19000, status: 'refunded', created_at: '2025-10-22', item: '텀블러' }
+                      ],
+                      102: [
+                        { id: 9011, customer_id: cid, total: 69000, status: 'paid', created_at: '2025-10-19', item: '무선 충전패드' },
+                        { id: 9012, customer_id: cid, total: 139000, status: 'paid', created_at: '2025-10-22', item: '메신저백' }
+                      ],
+                      103: [
+                        { id: 9021, customer_id: cid, total: 22900, status: 'paid', created_at: '2025-10-18', item: '볼펜 세트' },
+                        { id: 9022, customer_id: cid, total: 34900, status: 'canceled', created_at: '2025-10-21', item: '머그컵' }
+                      ],
+                      104: [
+                        { id: 9031, customer_id: cid, total: 259000, status: 'paid', created_at: '2025-10-17', item: '노트북 가방' },
+                        { id: 9032, customer_id: cid, total: 89000, status: 'paid', created_at: '2025-10-19', item: '무선 키보드' }
+                      ],
+                      105: [
+                        { id: 9041, customer_id: cid, total: 15900, status: 'paid', created_at: '2025-10-18', item: '노트 세트' },
+                        { id: 9042, customer_id: cid, total: 21900, status: 'refunded', created_at: '2025-10-20', item: '텀블러' }
+                      ]
+                    }
+                    return orders[cid] || []
+            - name: 메모
+              blocks:
+                - type: http
+                  method: POST
+                  fetchFn: |                  
+                    if (!customer_id) return { error: '고객 선택 필요' }
+                    if (!memo?.trim()) return { error: '메모 필수' }
+                    alert('메모가 저장되었습니다')
+                    return { ok: true, saved: { customer_id: Number(customer_id), memo: memo.trim(), saved_at: new Date().toISOString() } }                                                    
+                  params:
+                    - key: memo
+                      format: textarea
+                  display: form      
+```
