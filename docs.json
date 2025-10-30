@@ -11,10 +11,10 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Building",
         "groups": [
           {
-            "group": "Simple pages",
+            "group": "Basic",
             "pages": [
               "how-to/call-api",
               "how-to/filter-data",
@@ -24,7 +24,7 @@
             ]
           },
           {
-            "group": "Advanced pages",
+            "group": "Advanced",
             "pages": [
               "how-to/compose-layout",
               "how-to/open-container",
@@ -43,13 +43,13 @@
           {
             "group": "Featured",
             "pages": [
-              
+              "how-to/call-api"
             ]
           },
           {
             "group": "All",
             "pages": [
-              
+              "how-to/call-api"
             ]
           }
         ]
