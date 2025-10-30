@@ -16,23 +16,23 @@
           {
             "group": "Basic",
             "pages": [
-              "how-to/call-api",
-              "how-to/filter-data",
-              "how-to/create-form",
-              "how-to/run-actions",
-              "how-to/make-chart"
+              "kb/1000",
+              "kb/1001",
+              "kb/1002",
+              "kb/1003",
+              "kb/1004"
             ]
           },
           {
             "group": "Advanced",
             "pages": [
-              "how-to/compose-layout",
-              "how-to/open-container",
-              "how-to/set-navigation",
-              "how-to/read-related-data",
-              "how-to/update-data",
-              "how-to/column-options",
-              "how-to/environment-variables"
+              "kb/1100",
+              "kb/1101",
+              "kb/1102",
+              "kb/1103",
+              "kb/1104",
+              "kb/1105",
+              "kb/1106"
             ]
           }
         ]
@@ -43,13 +43,13 @@
           {
             "group": "Featured",
             "pages": [
-              "how-to/call-api"
+              "kb/2000"
             ]
           },
           {
             "group": "All",
             "pages": [
-              "how-to/call-api"
+              "kb/2000"
             ]
           }
         ]
