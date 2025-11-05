@@ -1,0 +1,122 @@
+---
+title: "Form Input"
+---
+
+다양한 입력 폼(UI)을 정의하고, 화면이 생성되는 방식을 보여줍니다. 각 입력값은 콘솔에 출력되며, 간단한 유효성 검사를 통해 폼 데이터 처리 과정을 확인할 수 있습니다.
+
+```yaml
+blocks:
+  - type: http
+    method: POST
+    fetchFn: |
+      // ✅ 입력된 모든 데이터를 콘솔에서 확인
+      console.log("📥 전체 입력값:", params);
+
+      // 개별 값 확인
+      console.log("name:", params.name);
+
+      // 간단한 유효성 검사 예시
+      if (!params.name || !params.email) {
+        return { error: '이름과 이메일은 필수입니다.' }
+      }
+
+      // 결과 반환
+      return {
+        message: '폼 데이터가 콘솔에 출력되었습니다 ✅',
+        received: params
+      }
+    display: form
+    formOptions:
+      width: 700px
+      firstLabelWidth: 200px
+    params:
+      - key: name
+        label: 이름
+        value: 홍길동
+      - key: email
+        label: 이메일
+        value: hong@example.com
+        required: true
+      - key: number
+        label: 나이
+        format: number
+        min: 5
+        max: 100
+        step: 5
+        value: 25
+      - key: textarea
+        label: 자기소개
+        format: textarea
+        value: 안녕하세요! 저는 홍길동입니다.
+      - key: placeholder
+        label: 플레이스홀더 예시
+        placeholder: 여기에 입력하세요
+      - key: help
+        label: 도움말 예시
+        help: 여기에 간단한 설명을 적을 수 있습니다.
+        value: 도움말 입력값
+      - key: dropdown
+        label: 드롭다운 선택
+        dropdown:
+          - 사과
+          - 바나나
+          - 포도
+        value: 바나나
+      - key: radio
+        label: 라디오 버튼 선택
+        radio:
+          - 남자
+          - 여자
+          - 기타
+        value: 남자
+      - key: checkbox
+        label: 체크박스 그룹
+        checkboxButtonGroup: true
+        values: []
+        checkbox:
+          - label: 알파(a)
+            value: a
+          - label: 베타(b)
+            value: b
+      - key: date
+        label: 날짜 선택
+        format: date
+        value: 2025-11-05
+      - key: daterange
+        label: 기간 선택
+        format: date
+        range: true
+        value:
+          - 2025-11-01
+          - 2025-11-10
+      - key: color
+        label: 색상 선택
+        format: color
+        value: "#4A90E2"
+      - key: file
+        label: 파일 업로드
+        format: file
+        value: example.pdf
+      - key: address
+        label: 주소 입력
+        format: address
+        value: 서울특별시 강남구 테헤란로 123
+        updateParams:
+          address: roadAddress
+      - key: editor
+        label: 에디터
+        format: editor
+        value: "<p><b>안녕하세요!</b> 이것은 에디터 입력 예시입니다.</p>"
+      - key: tiptap
+        label: Tiptap 에디터
+        format: tiptap
+        value: "<p>Tiptap으로 작성된 예시 콘텐츠입니다 ✍️</p>"
+      - key: readonly
+        label: 읽기 전용
+        readonly: true
+        value: 이 필드는 수정할 수 없습니다.
+      - key: disabled
+        label: 비활성화
+        disabled: true
+        value: 비활성화된 필드입니다.
+```
