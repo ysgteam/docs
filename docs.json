@@ -6,7 +6,7 @@
     "primary": "#2C2E4A",
     "light": "#5B6CB1",
     "dark": "#1E1F3B"
-  },  
+  },
   "favicon": "/symbol_transparent.png",
   "navigation": {
     "tabs": [
@@ -40,11 +40,6 @@
       {
         "tab": "Recipes",
         "groups": [
-          {
-            "group": "Featured",
-            "pages": [
-            ]
-          },
           {
             "group": "All",
             "pages": [
@@ -100,31 +95,55 @@
       {
         "header": "Product",
         "items": [
-          { "label": "셀렉트 어드민", "href": "https://selectfromuser.com" },   
-          { "label": "보안 준수", "href": "https://selectfromuser.com/product/row-level-security" },
-          { "label": "솔루션", "href": "https://selectfromuser.com/solutions" }
+          {
+            "label": "셀렉트 어드민",
+            "href": "https://selectfromuser.com"
+          },
+          {
+            "label": "보안 준수",
+            "href": "https://selectfromuser.com/product/row-level-security"
+          },
+          {
+            "label": "솔루션",
+            "href": "https://selectfromuser.com/solutions"
+          }
         ]
       },
       {
         "header": "Service",
         "items": [
-          { "label": "커뮤니티", "href": "https://ask.selectfromuser.com" },
-          { "label": "서비스 상태", "href": "https://status.selectfromuser.com" }
+          {
+            "label": "커뮤니티",
+            "href": "https://ask.selectfromuser.com"
+          },
+          {
+            "label": "서비스 상태",
+            "href": "https://status.selectfromuser.com"
+          }
         ]
       },
       {
         "header": "Company",
         "items": [
-          { "label": "블로그", "href": "https://blog.selectfromuser.com" },
-          { "label": "이용약관", "href": "https://selectfromuser.com/terms" },
-          { "label": "개인정보보호정책", "href": "https://selectfromuser.com/privacy" }
+          {
+            "label": "블로그",
+            "href": "https://blog.selectfromuser.com"
+          },
+          {
+            "label": "이용약관",
+            "href": "https://selectfromuser.com/terms"
+          },
+          {
+            "label": "개인정보보호정책",
+            "href": "https://selectfromuser.com/privacy"
+          }
         ]
       }
-    ]    
+    ]
   },
   "integrations": {
-      "ga4": {
-          "measurementId": "G-GB2ZCRZ12L"
-      }
-  } 
+    "ga4": {
+      "measurementId": "G-GB2ZCRZ12L"
+    }
+  }
 }
