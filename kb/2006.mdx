@@ -1,0 +1,134 @@
+---
+title: "Excel to JSON Workflow"
+description: "Description of your new file."
+---
+
+엑셀·CSV 파일을 업로드하면 자동으로 JSON으로 변환해 저장하고, 업로드된 파일 목록과 내용을 테이블로 바로 확인할 수 있는 레시피입니다. 
+
+데이터 가져오기와 관리 흐름을 손쉽게 구성할 수 있습니다.
+
+```yaml
+blocks:
+  # 1) 파일 업로드 & JSON 저장
+  - type: http
+    name: 엑셀 업로드 → JSON 저장
+    method: POST
+    display: form
+    params:
+      - key: sheet
+        label: 엑셀/CSV 업로드
+        width: 400px
+        format: sheet
+        accept: .csv,.xlsx
+        preview: true
+        sheetOptions:
+          multiple: true
+          # ✅ 엑셀 시리얼날짜 자동 변환 (YYYY-MM-DD 형태)
+          convertDate:
+            - 시작일
+            - 종료일
+    fetchFn: |
+      if (!Array.isArray(sheet) || !sheet.length) {
+        return { error: '업로드된 시트에 데이터가 없습니다.' }
+      }
+
+      const rows = sheet.map(r => ({
+        name: String(r['상품명'] ?? ''),
+        unit: Number(r['수량'] ?? 0),
+        ...(r['시작일'] ? { startDate: r['시작일'] } : {}),
+        ...(r['종료일'] ? { endDate: r['종료일'] } : {})
+      }))
+
+      const res = await fetch(`${API || 'http://localhost:9500'}/local/import/save-json`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payload: { rows } })
+      })
+
+      if (!res.ok) return { error: `HTTP ${res.status}` }
+      const data = await res.json().catch(() => ({}))
+      return { message: `저장 완료 (${rows.length}행)`, result: data }
+    reloadAfterSubmit: true    
+  
+  # 1-1) 업로드 양식 다운로드
+  - type: http
+    method: GET
+    fetchFn: |
+      return [
+        {
+          "id": "",
+          "상품명": "",
+          "수량": "",
+          "시작일": "",
+          "종료일": ""
+        }
+      ]
+    showDownload: false
+    tableOptions:
+      hidden: true
+    actions:
+      - label: 업로드 양식 다운로드
+        button:
+          icon: mdi-download
+        showDownload: csv xlsx
+        single: true
+
+  # 2) 업로드된 파일 목록
+  - type: http
+    name: 업로드 파일 목록
+    method: GET
+    display: table
+    showDownload: false
+    fetchFn: |
+      const base = API || 'http://localhost:9500'
+      const r = await fetch(`${base}/local/import/list`)
+      if (!r.ok) return [{ error: `HTTP ${r.status}` }]
+      const data = await r.json()
+      return (data.files || []).map(f => ({
+        file: f.file,
+        size: f.size,
+        mtime: new Date(f.mtime).toISOString()
+      }))
+    columns:
+      file:
+        width: 520px
+        openModal: file-detail-:file
+      size:
+        formatFn: |
+          (value > 1024*1024)
+            ? (value/1024/1024).toFixed(1) + ' MB'
+            : (value/1024).toFixed(1) + ' KB'
+      mtime:
+        width: 220px
+
+    # 3) 파일 상세 보기 모달
+    modals:
+      - path: file-detail-:file
+        width: 800px
+        title: 파일 내용 보기
+        blocks:
+          - type: http
+            name: 파일 데이터
+            method: GET
+            fetchFn: |
+              const base = API || 'http://localhost:9500'
+              const url = new URL(`${base}/local/import/read`)
+              url.searchParams.set('file', file)
+              const r = await fetch(url)
+              if (!r.ok) return [{ error: `HTTP ${r.status}` }]
+              const data = await r.json()
+              return data.rows || []
+            columns:
+              name: { width: 300px }
+              unit: { width: 120px }
+              startDate:
+                width: 140px
+                formatFn: date
+              endDate:
+                width: 140px
+                formatFn: date
+            params:
+              - key: file
+                valueFromRow: file
+            showDownload: csv xlsx
+```
