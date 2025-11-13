@@ -1,0 +1,103 @@
+---
+title: "QR Code Generator"
+---
+
+아래 예제는 QR 코드를 생성하고, 생성된 QR 내역을 조회하며, 각각의 QR 이미지를 모달에서 미리보기까지 할 수 있는 기본 구조를 보여줍니다. API 기반 fetchFn을 활용해 폼 입력 → 저장 → 리스트 → 상세보기 흐름을 완성하는 예시입니다.
+
+```yaml
+blocks:
+  # 1) QR 생성 폼
+  - type: http
+    name: QR 생성
+    method: POST
+    display: form
+    formOptions: { firstLabelWidth: 200px, width: 800px }
+    fetchFn: |
+      try {
+        const base = API || 'http://localhost:9500'
+        const payload = {
+          text: String(text || '').trim(),
+          size: Number(size || 256),
+          margin: Number(margin || 2),
+          ecLevel: String(ecLevel || 'M'),
+          fmt: String(fmt || 'png'),
+        }
+        if (!payload.text) return { error: '텍스트를 입력하세요.' }
+        const r = await fetch(`${base}/local/qr/save-json`, {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ payload })
+        })
+        const data = await r.json().catch(() => ({}))
+        return { result: data }
+      } catch (err) { return { error: String(err) } }
+    params:
+      - { key: text, label: 텍스트/URL, placeholder: QR에 넣을 내용 }
+      - { key: size, label: 사이즈(px), defaultValue: 256 }
+      - { key: margin, label: 여백(px), defaultValue: 2 }
+      - key: ecLevel
+        label: 오류 보정
+        dropdown: [L, M, Q, H]
+        defaultValue: M
+      - key: fmt
+        label: 포맷
+        dropdown: [png, svg]
+        defaultValue: png
+
+  # 2) QR 생성 내역 리스트
+  - type: http
+    name: 생성 내역
+    method: GET
+    fetchFn: |
+      try {
+        const r = await fetch((API || 'http://localhost:9500') + '/local/qr/list')
+        const data = await r.json().catch(() => ({}))
+        return (data.rows || []).map(row => ({
+          ...row, label: row.text?.slice(0,60) || ''
+        }))
+      } catch (err) { return [] }
+    searchOptions: { enabled: true }
+    columns:
+      label: { width: 380px, openModal: preview-:id }
+      imageUrl:
+        width: 180px
+        template: |
+          <img src="{{imageUrl}}" style="width:120px;height:120px;object-fit:contain;border:1px solid #eee;border-radius:8px;padding:4px;" />
+      ecLevel: { width: 80px }
+      fmt: { width: 70px }
+      createdAt: { width: 180px }
+      ' ':
+        append: true
+        template: |
+          <a href="http://localhost:9500/local/qr/download?id={{id}}" class="bg-slate-100 p-2">다운로드</a>
+
+    # 3) 미리보기 모달
+    modals:
+      - path: preview-:id
+        width: 720px
+        title: QR 미리보기
+        blocks:
+          - type: http
+            method: GET
+            fetchFn: |
+              try {
+                const base = API || 'http://localhost:9500'
+                const url = new URL(`${base}/local/qr/read`)
+                url.searchParams.set('id', id)
+                const r = await fetch(url)
+                const data = await r.json().catch(()=>({}))
+                return [data.row || {}]
+              } catch(e){ return [] }
+            params:
+              - { key: id, valueFromRow: id }
+            columns:
+              text: { width: 520px }
+              imageUrl:
+                template: |
+                  <div style="display:flex;gap:20px;align-items:center;">
+                    <img src="{{imageUrl}}" style="width:260px;height:260px;object-fit:contain;border:1px solid #eee;border-radius:12px;padding:8px;" />
+                    <a href="{{imageUrl}}" target="_blank" class="no-underline bg-slate-500/5 rounded-lg p-2 flex items-center">
+                      <span class="mdi mdi-download mr-1"></span>
+                      <span>원본 다운로드</span>
+                    </a>
+                  </div>
+```
