@@ -6,10 +6,9 @@ description: "테이블 아이템에 대한 커스텀 코드와 모달 구성"
 아래 예제는 테이블을 표시하여 로우, 컬럼마다 이벤트 처리를 추가합니다. 체크박스 클릭으로 항목을 선택하고 '삭제'를 누르거나, 전체선택을 구현하거나, `Price` 헤더 클릭으로 커스텀 정렬을 합니다. `추가` 클릭으로 개별 모달을 띄웁니다.
 
 ```yaml
-
 state:
   loadOrders: |
-    // 별도 param 넘기지않아도 받음
+    // param이 기본으로 들어있음. 요청시 활용
     
     return [
       { id: 1001, oid: 'A33030', name: '꾸버스 프리미엄 그릴세트', shopCode: 'S001', price: 365000 },
@@ -23,61 +22,22 @@ state:
     ]
     
 blocks:
-- type: modal
-  name: confirm-delete
-  header: 삭제 확인
-  text: |
-    상품을 삭제하면 기존 공유 링크가 깨질 수 있습니다.
-    <br />
-    계속하시겠습니까?
-  leftButtons:
-    - label: 취소
-      clickFn: |
-        const {$modal} = opt
-        // todo
-        $modal.hide('confirm-delete')
-  rightButtons:
-    - label: 확인
-      clickFn: |
-        const {$modal, block, state} = opt
-        // todo
-        state.selectedRows = null
-        $modal.hide('confirm-delete')
-  
-- type: modal
-  name: add
-  # clickToClose: false
-  header: 상품 추가
-  text: 가격을 입력해주세요.
-  # title: 상품 추가
-  # subtitle: 가격을 입력해주세요.
-  blocks:
-    - type: markdown
-      content: |
-        > 공지사항
-    
-    - type: form
-      params:
-        - key: name
-          group: 1
-          stack: true
-        - key: price
-          stack: true
-      buttons:
-        - label: 추가
-          clickFn: |
-            const {button, block, $modal, $result} = opt
-            
-            $result({
-              message: 'Saved!!'
-            })
-            
-      # showResult: table
-      showResult: template
-      showResultTemplate: |
-        <p class="text-green-800 bg-green-800/10 rounded p-4">{{message}}</p>
 
 - type: table
+
+  fetchFn: |
+    const rows = await params.loadOrders()
+    
+    return rows.map(e => {
+      e.checked = false
+      e.priceText = filters.number(e.price)
+      return e
+    })
+  
+  # height: 200px # 세로폭 줄이는 경우
+  # width: 500px # 가로폭 줄이는 경우
+  full: true # 가로 화면에 채우기
+  
   headers:
     checked:
       label: 선택
@@ -150,23 +110,57 @@ blocks:
       clickFn: |
         const { $modal, $toast, block, state } = opt
         $modal.show('add')
+        
   
-
-  # 세로폭 줄이기만 가능
-  # height: 200px
+- type: modal
+  name: confirm-delete
+  header: 삭제 확인
+  text: |
+    상품을 삭제하면 기존 공유 링크가 깨질 수 있습니다.
+    <br />
+    계속하시겠습니까?
+  leftButtons:
+    - label: 취소
+      clickFn: |
+        const {$modal} = opt
+        // todo
+        $modal.hide('confirm-delete')
+  rightButtons:
+    - label: 확인
+      clickFn: |
+        const {$modal, block, state} = opt
+        // todo
+        state.selectedRows = null
+        $modal.hide('confirm-delete')
   
-  # 가로폭 줄이기만 가능
-  # width: 500px
-
-  # 항상 크게 채우기
-  full: true
-
-  fetchFn: |
-    const rows = await params.loadOrders()
+- type: modal
+  name: add
+  # clickToClose: false
+  header: 상품 추가
+  text: 가격을 입력해주세요.
+  blocks:
+    - type: markdown
+      content: |
+        > 공지사항
     
-    return rows.map(e => {
-      e.checked = false
-      e.priceText = filters.number(e.price)
-      return e
-    })
+    - type: form
+      params:
+        - key: name
+          group: 1
+          stack: true
+        - key: price
+          stack: true
+      buttons:
+        - label: 추가
+          clickFn: |
+            const {button, block, $modal, $result} = opt
+            
+            $result({
+              message: 'Saved!!'
+            })
+            
+      # showResult: table
+      showResult: template
+      showResultTemplate: |
+        <p class="text-green-800 bg-green-800/10 rounded p-4">{{message}}</p>
 ```
