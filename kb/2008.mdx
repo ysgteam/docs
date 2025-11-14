@@ -1,0 +1,172 @@
+---
+title: "Row actions and modals"
+description: "테이블 아이템에 대한 커스텀 코드와 모달 구성"
+---
+
+아래 예제는 테이블을 표시하여 로우, 컬럼마다 이벤트 처리를 추가합니다. 체크박스 클릭으로 항목을 선택하고 '삭제'를 누르거나, 전체선택을 구현하거나, `Price` 헤더 클릭으로 커스텀 정렬을 합니다. `추가` 클릭으로 개별 모달을 띄웁니다.
+
+```yaml
+
+state:
+  loadOrders: |
+    // 별도 param 넘기지않아도 받음
+    
+    return [
+      { id: 1001, oid: 'A33030', name: '꾸버스 프리미엄 그릴세트', shopCode: 'S001', price: 365000 },
+      { id: 1002, oid: 'A33031', name: '꾸버스 캠핑 그릴세트', shopCode: 'S001', price: 372000 },
+      { id: 1003, oid: 'A33032', name: '꾸버스 기본형 그릴세트', shopCode: 'S002', price: 369000 },
+      { id: 1004, oid: 'A33033', name: '꾸버스 대형 그릴패키지', shopCode: 'S003', price: 759000 },
+      { id: 1005, oid: 'A33034', name: '꾸버스 풀옵션 그릴세트', shopCode: 'S003', price: 865000 },
+      { id: 1006, oid: 'A33035', name: '꾸버스 스탠다드 그릴키트', shopCode: 'S002', price: 458000 },
+      { id: 1007, oid: 'A33036', name: '꾸버스 소형 그릴패키지', shopCode: 'S004', price: 189000 },
+      { id: 1008, oid: 'A33037', name: '꾸버스 미들레인지 그릴세트', shopCode: 'S001', price: 371000 }
+    ]
+    
+blocks:
+- type: modal
+  name: confirm-delete
+  header: 삭제 확인
+  text: |
+    상품을 삭제하면 기존 공유 링크가 깨질 수 있습니다.
+    <br />
+    계속하시겠습니까?
+  leftButtons:
+    - label: 취소
+      clickFn: |
+        const {$modal} = opt
+        // todo
+        $modal.hide('confirm-delete')
+  rightButtons:
+    - label: 확인
+      clickFn: |
+        const {$modal, block, state} = opt
+        // todo
+        state.selectedRows = null
+        $modal.hide('confirm-delete')
+  
+- type: modal
+  name: add
+  # clickToClose: false
+  header: 상품 추가
+  text: 가격을 입력해주세요.
+  # title: 상품 추가
+  # subtitle: 가격을 입력해주세요.
+  blocks:
+    - type: markdown
+      content: |
+        > 공지사항
+    
+    - type: form
+      params:
+        - key: name
+          group: 1
+          stack: true
+        - key: price
+          stack: true
+      buttons:
+        - label: 추가
+          clickFn: |
+            const {button, block, $modal, $result} = opt
+            
+            $result({
+              message: 'Saved!!'
+            })
+            
+      # showResult: table
+      showResult: template
+      showResultTemplate: |
+        <p class="text-green-800 bg-green-800/10 rounded p-4">{{message}}</p>
+
+- type: table
+  headers:
+    checked:
+      label: 선택
+      width: 50px
+      format: checkbox
+    id: 
+      label: ID
+    oid: 
+      label: OID
+
+    name:
+      # width: 1000px
+      width: 200px
+    priceText:
+      label: Price
+      clickFn: |
+        const {header, block, _} = opt  
+        if (!header.iconEnd) {
+          // asc
+          block._rows = block.rows
+          block.rows = _.sortBy(block.rows, 'price')
+
+          header.iconEnd = 'arrow-down'
+        } 
+        else if (header.iconEnd == 'arrow-down') {
+          // desc
+          block.rows = _.sortBy(block.rows, 'price').reverse()
+
+          header.iconEnd = 'arrow-up'
+        }
+        else {
+          block.rows = block._rows
+          header.iconEnd = ''
+        }
+      classFn: |
+        const {row} = opt
+        if (+row.price > 500000) return 'bg-amber-200/20'
+        if (+row.price < 200000) return 'bg-sky-200/20'
+        return ''
+  
+  rowClickFn: |
+    const {row, key, block} = opt
+    row.checked = !row.checked 
+
+  leftButtons:
+    - label: 전체선택
+      clickFn: |
+        console.log('wow')
+        const {block} = opt
+        const next = !block.rows[0].checked
+        block.rows.forEach(e => {
+          e.checked = next
+        })
+    - label: 삭제
+      clickFn: |
+        const { $modal, $toast, block, state } = opt
+
+        const checked = block.rows.filter(e => e.checked)
+        if (checked.length == 0) {
+          return $toast('항목을 선택해주세요.')
+        }
+
+        state.selectedRows = checked
+        
+        $modal.show('confirm-delete')
+    - label: 비어있는 버튼
+    
+  rightButtons:
+    - label: 추가
+      clickFn: |
+        const { $modal, $toast, block, state } = opt
+        $modal.show('add')
+  
+
+  # 세로폭 줄이기만 가능
+  # height: 200px
+  
+  # 가로폭 줄이기만 가능
+  # width: 500px
+
+  # 항상 크게 채우기
+  full: true
+
+  fetchFn: |
+    const rows = await params.loadOrders()
+    
+    return rows.map(e => {
+      e.checked = false
+      e.priceText = filters.number(e.price)
+      return e
+    })
+```
