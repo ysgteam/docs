@@ -1,0 +1,102 @@
+---
+title: "URL Page state with Query API"
+description: "Simplify each query runs by env config, and runs "
+---
+
+쿼리 API를 통해서 데이터를 조회하고, 사용자 입력으로 검색합니다.
+
+![Screenshot 2025-11-18 at 4.55.05 PM.png](/images/Screenshot2025-11-18at4.55.05PM.png)
+
+![Screenshot 2025-11-18 at 4.58.02 PM.png](/images/Screenshot2025-11-18at4.58.02PM.png)
+
+![Screenshot 2025-11-18 at 4.58.13 PM.png](/images/Screenshot2025-11-18at4.58.13PM.png)
+
+![Screenshot 2025-11-18 at 5.04.00 PM.png](/images/Screenshot2025-11-18at5.04.00PM.png)
+
+
+> 아래와 같이 API를 단축하여 사용하려면 환경변수(environmental variables) 설정이 필요합니다.
+> `SELECT_QUERY_DEV_RO`로 설정하는 경우 `DEV_RO`로 활용합니다.
+
+```yaml
+title: Team
+state:
+  id: 
+  name:
+blocks:
+  - type: search
+    params:
+      - key: id
+      - key: name
+    buttons:
+      - label: Search
+        type: submit
+        clickFn: |
+          const {state, $modal, $router} = opt
+          await state.reload(opt)
+
+  - type: table
+    fetchFn: |
+      state.reload = async () => {
+        if (state.id) {
+          const r = await query('DEV_RO', `
+            SELECT id, name, domain, plan 
+            FROM Team 
+            WHERE id = ${ +state.id || 0}
+            LIMIT 100
+          `)
+          return params.$result(r)
+        }
+        else if (state.name) {
+          const r = await query('DEV_RO', `
+            SELECT id, name, domain, plan 
+            FROM Team 
+            WHERE name LIKE '%${ state.name }%'
+            LIMIT 100
+          `)
+          return params.$result(r)
+        }
+        else {
+          const r = await query('DEV_RO', `
+            SELECT id, name, domain, plan 
+            FROM Team 
+            LIMIT 100
+          `)
+          return params.$result(r)
+        }
+      }
+      return state.reload()
+    
+    autoHeader: true
+```
+
+Query API 기능을 활용하는 경우 아래와 같은 서버 코드를 구현합니다.
+
+```js
+router.post('/wYq7jE-KU12dzZnliNdcS/readonly-query', async (req, res, next) => {
+  try {
+    // 설정 JWT Secret에서 설정한 값
+    const token = jwt.verify(req.body.token, 'FQfJz6Af8k5QkPIhjdIwXsPXrqebMxrX')
+
+    // 사내 보안 단계에 따른 필터링
+    if (!token.email.endsWith('@selectfromuser.com')) {
+      throw StatusError(400, '인증 실패')
+    }
+
+    // query('RESOURCE', 'sql', {id: 1000}) 자유롭게 bind parameter 구성 가능합니다.
+    // 해당 예시에서는 모두 실행합니다.
+    const master = await getConnection('mysql.slave')
+    const rows = await master.query(req.body.query)
+
+    res.status(200).json({
+      message: 'ok',
+      rows,
+    })
+
+  } catch (e) {
+    res.status(200).json({
+      message: e.message,
+      error: e,
+    })
+  }
+})
+```
