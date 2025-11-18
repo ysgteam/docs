@@ -70,18 +70,29 @@
   "navbar": {
     "links": [
       {
-        "label": "Home",
-        "href": "https://www.selectfromuser.com",
+        "label": "사용자",
+        "href": "https://www.selectfromuser.com/#users",
         "target": "_self"
       },
       {
-        "label": "Support",
-        "href": "mailto:support@selectfromuser.com"
+        "label": "레시피",
+        "href": "https://developers.selectfromuser.com/kb/2000",
+        "target": "_self"
+      },
+      {
+        "label": "가격",
+        "href": "https://www.selectfromuser.com/#pricing",
+        "target": "_self"
+      },
+      {
+        "label": "개발자 문서",
+        "href": "https://developers.selectfromuser.com",
+        "target": "_self"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
+      "label": "Dashboard →",
       "href": "https://app.selectfromuser.com"
     }
   },
