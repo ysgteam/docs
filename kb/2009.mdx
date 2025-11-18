@@ -1,0 +1,139 @@
+---
+title: "Display data from BI(SQL) API"
+description: "Renders the table with clickable row and opening a popup modal by fetch data from query parameter. The page is ready for share, refresh, continuous view."
+---
+
+데이터베이스를 직접 연결하지 않고 쿼리 API를 호출하여 일반적인 테이블 표시, 클릭, 모달 표시, 상세 조회를 구성합니다.
+
+```
+title: TeamBilling
+blocks:
+  - type: table
+    fetchFn: |
+      const r = await axios({
+        url: BI_API + '/readonly-query',
+        method: 'POST',
+        data: {
+          token: SELECT_ACCESS_TOKEN,
+          query: `
+          
+          SELECT * FROM TeamBilling
+          ORDER BY id DESC
+          LIMIT 10
+          
+          `,
+        },
+        json: true
+      })
+
+      return r.data?.rows || r.data
+    autoHeader: true
+    headers:
+      receipt_json:
+        hidden: true
+      deleted_at:
+        hidden: true
+      json:
+        format: json
+        width: 500px
+      org_id:
+        format: link
+    # full: true
+    width: 100%
+    rowClickFn: |
+      const {block, row, key, $modal} = opt
+      if (key == 'org_id') {
+        opt.$router.push({
+          query: {
+            oid: row.org_id,
+          }
+        }).catch()
+
+        $modal.show('org_id')
+      }
+
+  - type: modal
+    name: org_id
+    header: Teams of organization
+    routeQuery: oid 
+    width: 800
+    defaultHeight: 50vh
+    # clickToClose: false
+    blocks:
+      - type: table
+        fetchFn: |
+          const r = await axios({
+            url: BI_API + '/readonly-query',
+            method: 'POST',
+            data: {
+              token: SELECT_ACCESS_TOKEN,
+              query: `
+              
+              SELECT id, name, created_at, plan, plan_state FROM Team
+              WHERE org_id = '${ params.$route?.query?.oid || 0 }'
+              LIMIT 10
+              `,
+              
+            },
+            json: true
+          })
+
+          return r.data?.rows || r.data
+        autoHeader: true
+        rowClickFn: |
+          const {block, row, key, $modal} = opt
+          opt.$router.push({
+            query: {
+              ...opt.$route.query,
+              tid: row.id,
+            }
+          }).catch()
+
+          $modal.show('team_id')
+
+  - type: modal
+    name: team_id
+    header: Team Info
+    routeQuery: tid 
+    width: 800
+    defaultHeight: 50vh
+    # clickToClose: false
+    draggable: true
+    shiftX: 0.55
+    blocks:
+      - type: tab
+        tabOptions:
+          type: plain
+          autoload: 1
+          tabs:
+          - name: TeamRow
+            blocks:
+            - type: table
+              title: TeamRow
+              fetchFn: |
+                const r = await axios({
+                  url: BI_API + '/readonly-query',
+                  method: 'POST',
+                  data: {
+                    token: SELECT_ACCESS_TOKEN,
+                    query: `
+                    
+                    SELECT id, team_id, name, \`type\`, created_at, user_id FROM TeamRow
+                    WHERE team_id = '${ params.$route?.query?.tid || 0 }'
+                    LIMIT 10
+                    `,
+                    
+                  },
+                  json: true
+                })
+
+                
+
+                return r.data?.rows || r.data
+              autoHeader: true
+          - name: Detail
+            blocks:
+            - type: markdown
+              content: |
+                > todo
+```
