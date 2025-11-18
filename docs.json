@@ -69,7 +69,8 @@
     "links": [
       {
         "label": "Home",
-        "href": "https://www.selectfromuser.com"
+        "href": "https://www.selectfromuser.com",
+        "target": "_self"
       },
       {
         "label": "Support",
