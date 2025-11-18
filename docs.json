@@ -68,6 +68,10 @@
   "navbar": {
     "links": [
       {
+        "label": "Home",
+        "href": "https://www.selectfromuser.com"
+      },
+      {
         "label": "Support",
         "href": "mailto:support@selectfromuser.com"
       }
