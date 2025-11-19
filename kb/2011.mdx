@@ -1,0 +1,88 @@
+---
+title: "Form layout (column detail view)"
+description: "Detail view contains one or multiple items. Each row is clickable for value updates, or you can attach an action button to each section. Additional context can be added to the raw data as needed."
+---
+
+- 상세조회에 필요한 단건 조회, 여러건 조회를 구성합니다.
+- 각 항목은 별도 표기, 클릭하여 수정하도록 기능을 지원합니다.
+- JSON 기본 데이터에 자유롭게 액션을 추가 가능합니다.
+
+```
+title: Detail views
+blocks:
+
+- type: info
+  fetchFn: |
+    const rows = [
+      {
+        name: '참나무 하우스',
+        status: '영업중',
+        primaryInfo: '참나무 바베큐 장작구이 송파맛집',
+        secondaryInfo: ['바베큐', '화로구이', '고기', '모임', '회식'],
+        priceRange: '3~4',
+      },
+      
+      /*
+      {
+        name: '참나무 하우스',
+        status: '영업중',
+        primaryInfo: '참나무 바베큐 장작구이 송파맛집',
+        secondaryInfo: ['바베큐', '화로구이', '고기', '모임', '회식'],
+        priceRange: '3~4',
+      },
+      */
+      
+    ]
+    return rows.map(e => {
+      e.secondaryInfoLabel = `
+        <div class="flex gap-1 text-sm">
+        ${e.secondaryInfo.map(ee => `<span class="bg-violet-500/10 px-1.5 py-0.5 rounded">${ee}</span>`).join('')}
+        </div>
+      `
+      return e
+    })
+  autoHeader: true
+  full: true
+  headers:
+    priceRange:
+      iconEnd: clipboard-edit-outline
+      clickFn: |
+        // alert('헤더로부터 수정')
+        opt.$modal.show('editPriceOption')
+      leftButtons:
+        - label: 수정
+          clickFn: |
+            alert('수정버튼 클릭: ' + opt.row[opt.key])
+      rightButtons:
+        - label: 관련된 액션
+          clickFn: |
+            alert('액션버튼 클릭')
+    secondaryInfo:
+      hidden: true
+    secondaryInfoLabel:
+      format: html
+  leftButtons:
+    - label: 공개
+      clickFn: |
+        alert('처리 완료')
+  rightButtons:
+    - label: 삭제
+      clickFn: |
+        alert('처리 완료')
+  rowClickFn: |
+    const {key} = opt
+    
+    // alert(`${key}에 대한 수정`)
+    if (key == 'priceRange')
+      opt.$modal.show('editPriceValue')
+
+- type: modal
+  name: editPriceValue
+  header: 내역의 가격을 수정
+  text: 할까요?
+
+- type: modal
+  name: editPriceOption
+  header: 가격대, 기본값 관리
+  text: 할까요?
+```
