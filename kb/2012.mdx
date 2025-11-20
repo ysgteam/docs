@@ -1,0 +1,59 @@
+---
+title: "Tabs"
+description: "Tabs present all associated records in a clear, consolidated structure and enable users to transition into advanced actions or modification workflows with continuity and clarity."
+---
+
+탭은 내용의 부가정보를 쉽게 표시합니다. 복잡한 상세정보나 수정작업을 사용자 화면에 간결하게 추가합니다.
+
+![Screenshot 2025-11-20 at 4.34.16 PM.png](/images/Screenshot2025-11-20at4.34.16PM.png)
+
+```yaml
+title: Tabs
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        {
+          name: '참나무 하우스'
+        }
+      ]
+    autoHeader: true
+  - type: tabs
+    open: 0
+    panes:
+    - label: 기본정보
+      blocks:
+        - type: info
+          fetchFn: |
+            return [
+              {
+                name: '참나무 하우스',
+                nameEn: 'PineTreeHouse',
+              }
+            ]
+          autoHeader: true
+    - label: 가격관리
+      blocks:
+        - type: info
+          fetchFn: |
+            return [
+              {
+                weekday: 250000,
+                weekend: 450000,
+              }
+            ]
+          autoHeader: true
+    - label: 전시관리
+      blocks:
+        - type: info
+          fetchFn: |
+            return [
+              {
+                intro: 'N',
+                banner: 'Y',
+                list: 'Y',
+              }
+            ]
+          autoHeader: true
+  
+```
