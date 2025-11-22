@@ -1,0 +1,437 @@
+---
+title: "New features"
+---
+
+# 1. Data & State
+
+> 전역 데이터, 공통 함수, 데이터 가공을 관리하는 기본 레이어입니다.
+
+## Define shared state functions
+
+`state.[name]`
+
+```yaml
+state:
+  loadUsers: |
+    // 공통 데이터 로더
+    return [
+      { id: 1, name: 'Alice' },
+      { id: 2, name: 'Bob' }
+    ]
+
+blocks:
+  - type: table
+    fetchFn: |
+      const rows = await params.loadUsers()
+      return rows
+```
+
+## Save & reuse global values
+
+`state.key = value`
+
+```yaml
+state:
+  selected: null
+
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, name: 'alpha' },
+        { id: 2, name: 'beta' }
+      ]
+    leftButtons:
+      - label: 선택 저장
+        clickFn: |
+          const { block, state } = opt
+          state.selected = block.rows.filter(r => r.checked)
+```
+
+## Preprocess data in fetchFn
+
+`rows.map()`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      const items = [
+        { id: 1, price: 12000 },
+        { id: 2, price: 35000 }
+      ]
+
+      return items.map(i => ({
+        ...i,
+        priceText: filters.number(i.price),
+        checked: false
+      }))
+```
+
+---
+
+# 2. Table Basics
+
+> 기본 테이블을 구성하고, 컬럼과 선택 기능을 설정합니다.
+
+## Basic table definition
+
+`type: table`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, name: 'alpha' },
+        { id: 2, name: 'beta' }
+      ]
+    headers:
+      id:
+        label: ID
+      name:
+        label: 이름
+```
+
+## Checkbox selection
+
+`format: checkbox`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, name: 'alpha', checked: false },
+        { id: 2, name: 'beta', checked: false }
+      ]
+    headers:
+      checked:
+        label: 선택
+        width: 60px
+        format: checkbox
+      name:
+        label: 이름
+```
+
+## Toggle selection on row click
+
+`rowClickFn`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, checked: false, name: 'alpha' },
+        { id: 2, checked: false, name: 'beta' }
+      ]
+    rowClickFn: |
+      const { row } = opt
+      row.checked = !row.checked
+```
+
+---
+
+# 3. Advanced Table Interactions
+
+> 정렬, 강조, 상단 버튼 등 복잡한 인터랙션을 구성합니다.
+
+## Header click sort
+
+`headers.[name].clickFn`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { item: 'a', score: 20 },
+        { item: 'b', score: 10 },
+        { item: 'c', score: 30 }
+      ]
+    headers:
+      score:
+        label: 점수
+        clickFn: |
+          const { header, block, _ } = opt
+          if (!header.iconEnd) {
+            block._rows = block.rows
+            block.rows = _.sortBy(block.rows, 'score')
+            header.iconEnd = 'arrow-down'
+          } else if (header.iconEnd === 'arrow-down') {
+            block.rows = _.sortBy(block.rows, 'score').reverse()
+            header.iconEnd = 'arrow-up'
+          } else {
+            block.rows = block._rows
+            header.iconEnd = ''
+          }
+```
+
+## Conditional row styling
+
+`classFn`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, amount: 90000 },
+        { id: 2, amount: 5000 }
+      ]
+    headers:
+      amount:
+        label: 금액
+        classFn: |
+          const { row } = opt
+          if (row.amount > 50000) return 'bg-red-100'
+          if (row.amount < 10000) return 'bg-blue-100'
+          return ''
+```
+
+## Toolbar buttons
+
+`leftButtons`, `$toast`, `$modal`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1, checked: false, name: 'alpha' },
+        { id: 2, checked: false, name: 'beta' }
+      ]
+    leftButtons:
+      - label: 삭제
+        clickFn: |
+          const { block, $toast, $modal } = opt
+          const selected = block.rows.filter(r => r.checked)
+          if (selected.length === 0) return $toast('삭제할 항목을 선택하세요.')
+          $modal.show('confirm')
+```
+
+---
+
+# 4. Modal
+
+> 모달을 띄우고 닫는 기본적인 기능을 제공합니다.
+
+## Basic modal container
+
+`type: modal`
+
+```yaml
+blocks:
+  - type: modal
+    name: info
+    header: 안내
+    text: |
+      이 작업은 되돌릴 수 없습니다.
+    rightButtons:
+      - label: 닫기
+        clickFn: |
+          const { $modal } = opt
+          $modal.hide('info')
+```
+
+## Prevent background click
+
+`clickToClose: false`
+
+```yaml
+blocks:
+  - type: modal
+    name: critical
+    header: 중요한 작업
+    clickToClose: false
+    text: 삭제하시겠습니까?
+    rightButtons:
+      - label: 확인
+        clickFn: |
+          const { $modal } = opt
+          $modal.hide('critical')
+```
+
+## Open modal from another block
+
+`$modal.show(name)`
+
+```yaml
+blocks:
+  - type: table
+    rightButtons:
+      - label: 새 항목
+        clickFn: |
+          const { $modal } = opt
+          $modal.show('create')
+
+  - type: modal
+    name: create
+    header: 항목 추가
+    text: 정보를 입력해주세요.
+```
+
+---
+
+# 5. Markdown & Content
+
+> 안내문, 설명, 경고 등을 마크다운 기반으로 표시합니다.
+
+## Basic markdown block
+
+`type: markdown`
+
+```yaml
+blocks:
+  - type: markdown
+    content: |
+      # 주문 관리
+      아래 기능을 이용해 주문을 조회·수정할 수 있습니다.
+
+      > 최신 정보를 먼저 불러와 주세요.
+```
+
+## Markdown inside modal/form
+
+```yaml
+blocks:
+  - type: modal
+    name: guide
+    header: 설명
+    blocks:
+      - type: markdown
+        content: |
+          **입력 전 주의사항**
+          - 모든 필드는 필수입니다.
+          - 저장 전 내용을 확인하세요.
+```
+
+---
+
+# 6. Form
+
+> 입력 필드를 만들고, 그룹/레이아웃을 구성하고, 제출을 처리하는 기능을 제공합니다.
+
+## Define form fields
+
+`params`
+
+```yaml
+blocks:
+  - type: form
+    params:
+      - key: name
+        label: 이름
+      - key: email
+        label: 이메일
+```
+
+## Group & layout
+
+`group`, `stack`
+
+```yaml
+blocks:
+  - type: form
+    params:
+      - key: name
+        label: 이름
+        group: 1
+        stack: true
+      - key: price
+        label: 가격
+        group: 1
+        stack: true
+      - key: memo
+        label: 메모
+        group: 2
+        stack: true
+```
+
+## Submit & pass result
+
+`buttons.clickFn`, `$result`
+
+```yaml
+blocks:
+  - type: form
+    params:
+      - key: name
+        label: 이름
+      - key: email
+        label: 이메일
+    buttons:
+      - label: 저장
+        clickFn: |
+          const { name, email, $result } = opt
+          $result({
+            message: '저장 완료',
+            name,
+            email
+          })
+    showResult: template
+    showResultTemplate: |
+      <div class="bg-green-50 border border-green-200 p-3 rounded">
+        <p class="font-medium">{{message}}</p>
+        <p>이름: {{name}}</p>
+        <p>이메일: {{email}}</p>
+      </div>
+```
+
+---
+
+# 7. Utilities
+
+> `$toast`, `$modal`, `filters`, Lodash 등 공통 유틸 모음입니다.
+
+## Show toast
+
+`$toast`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [{ id: 1, name: 'alpha' }]
+    rightButtons:
+      - label: 안내
+        clickFn: |
+          const { $toast } = opt
+          $toast('작업이 완료되었습니다.')
+```
+
+## Use filters
+
+`filters.number`
+
+```yaml
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { name: 'basic', amount: 12000 },
+        { name: 'pro', amount: 54000 }
+      ]
+    rightButtons:
+      - label: 합계
+        clickFn: |
+          const { block, _, filters, $toast } = opt
+          const sum = _.sumBy(block.rows, 'amount')
+          $toast(filters.number(sum) + '원')
+```
+
+## Lodash utility
+
+`_.sortBy`, `_.sumBy`
+
+```yaml
+blocks:
+  - type: http
+    fetchFn: |
+      const list = [
+        { id: 1, score: 40 },
+        { id: 2, score: 10 }
+      ]
+      return _.sortBy(list, 'score')
+```
