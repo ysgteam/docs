@@ -1,0 +1,63 @@
+---
+title: "Edit Row with a Modal Form"
+description: "Learn how to open a modal when a table row is clicked and populate form fields using state values."
+---
+
+테이블 행을 클릭해서 모달 폼으로 편집하는 기본 패턴을 보여줍니다.
+
+- 테이블에서 행을 클릭하면
+- 클릭한 행 데이터를 `state`에 저장하고
+- 모달을 열어 `form`과 바인딩된 값을 수정합니다.
+
+```yaml
+title: Edit row with modal
+
+state:
+  edit_row:
+  edit_name:
+  edit_price:
+
+blocks:
+  - type: table
+    fetchFn: |
+      return [
+        { id: 1000, name: 'wow',     price: 27000 },
+        { id: 1001, name: 'stollen', price: 50000 },
+      ]
+    autoHeader: true
+    headers:
+      id:
+        hidden: true
+    rowClickFn: |
+      const { row, state, $modal } = opt
+
+      state.edit_row = row
+      state.edit_name = row.name
+      state.edit_price = row.price
+
+      $modal.show('editRow')
+      console.log('edit state:', state)
+
+  - type: modal
+    name: editRow
+    header: Edit row
+    blocks:
+      - type: form
+        params:
+          - key: edit_name
+          - key: edit_price
+        buttons:
+          - label: Submit
+            clickFn: |
+              const { state, $modal } = opt
+
+              alert(`updated: ${JSON.stringify({
+                id: state.edit_row?.id,
+                name: state.edit_name,
+                price: state.edit_price,
+              })}`)
+
+              // 실제 사용 시에는 여기서 업데이트 API를 호출한 뒤 목록을 새로고침하세요.
+              $modal.hide('editRow')
+              window.location.reload()
+```
