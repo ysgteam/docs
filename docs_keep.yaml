@@ -1,0 +1,29 @@
+# keep Build tab
+
+{
+  "tab": "Build",
+  "groups": [
+    {
+      "group": "Basic",
+      "pages": [
+        "kb/1000",
+        "kb/1001",
+        "kb/1002",
+        "kb/1003",
+        "kb/1004"
+      ]
+    },
+    {
+      "group": "Advanced",
+      "pages": [
+        "kb/1100",
+        "kb/1101",
+        "kb/1102",
+        "kb/1103",
+        "kb/1104",
+        "kb/1105",
+        "kb/1106"
+      ]
+    }
+  ]
+},
